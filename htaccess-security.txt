@@ -1,0 +1,62 @@
+# ── HONEYPOT & SECURITY RULES ────────────────────────────────────────────────
+# Pegar ANTES del bloque # BEGIN WordPress
+
+# Bloquear acceso directo a debug.log y honeypot log
+<Files "debug.log">
+  Order allow,deny
+  Deny from all
+</Files>
+<Files "cvbk-honeypot.log">
+  Order allow,deny
+  Deny from all
+</Files>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# ── wp-admin: clave en URL o cookie de sesión WP activa ─────────────────────
+RewriteCond %{REQUEST_URI} ^/wp-admin [NC]
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|gif|ico|woff|woff2|ttf|svg)$ [NC]
+RewriteCond %{QUERY_STRING} !key=wp4dm1n_Xs9kR2mP [NC]
+RewriteCond %{HTTP_COOKIE}  !wordpress_logged_in [NC]
+RewriteRule ^wp-admin(.*)$ /trampa.php [L]
+
+# ── wp-login.php → trampa (excepto con clave o ya logueado) ─────────────────
+RewriteCond %{REQUEST_URI} ^/wp-login\.php [NC]
+RewriteCond %{QUERY_STRING} !key=wp4dm1n_Xs9kR2mP [NC]
+RewriteCond %{HTTP_COOKIE}  !wordpress_logged_in [NC]
+RewriteRule ^wp-login\.php$ /trampa.php [L]
+
+# ── xmlrpc.php → trampa (vector de fuerza bruta) ────────────────────────────
+RewriteRule ^xmlrpc\.php$ /trampa.php [L]
+
+# ── phpMyAdmin y variantes → trampa ─────────────────────────────────────────
+RewriteRule ^(phpmyadmin|pma|myadmin|mysql|mysqladmin|sqlmanager|mysqlmanager|phpmy|phpmyadmin2|phpMyAdmin)(.*) /trampa.php [NC,L]
+
+# ── Rutas de admin genéricas → trampa ───────────────────────────────────────
+RewriteRule ^(admin|administrator|panel|backend|manage|controlpanel|cpanel|webadmin)(.*) /trampa.php [NC,L]
+
+# ── Archivos sensibles → trampa ──────────────────────────────────────────────
+RewriteRule ^(\.env|config\.php|wp-config\.php\.bak|\.git|\.svn|Dockerfile|docker-compose)(.*) /trampa.php [NC,L]
+
+# ── Shells y backdoors → trampa ──────────────────────────────────────────────
+RewriteRule ^(shell|cmd|backdoor|c99|r57|wso|b374k|mini_shell|webshell|alfa|indoxploit)(.*) /trampa.php [NC,L]
+
+# ── SQLi en query string → trampa ────────────────────────────────────────────
+RewriteCond %{QUERY_STRING} (union.*select|select.*from|insert.*into|drop.*table|benchmark\(|sleep\(|0x[0-9a-f]{4,}|base64_decode) [NC]
+RewriteRule .* /trampa.php [L]
+
+# ── XSS en query string → trampa ─────────────────────────────────────────────
+RewriteCond %{QUERY_STRING} (<script|javascript:|vbscript:|onload=|onerror=|eval\() [NC]
+RewriteRule .* /trampa.php [L]
+
+</IfModule>
+# ── FIN HONEYPOT & SECURITY RULES ────────────────────────────────────────────

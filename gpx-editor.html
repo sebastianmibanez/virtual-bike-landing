@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>GPX Editor</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: sans-serif; background: #111; color: #eee; }
+#toolbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; gap: 8px; padding: 6px 12px;
+  background: #1a1a1a; border-bottom: 1px solid #333; height: 44px;
+}
+#toolbar h1 { font-size: 13px; font-weight: bold; color: #f5e400; margin-right: 4px; }
+button { background: #333; color: #eee; border: none; padding: 5px 12px; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 3px; }
+button:hover { background: #555; }
+button.primary { background: #f5e400; color: #000; }
+button.primary:hover { background: #fff; }
+button.active-draw { background: #f5e400; color: #000; }
+button.active-del  { background: #c00; color: #fff; }
+#info { font-size: 12px; color: #888; margin-left: 4px; }
+#map { position: fixed; top: 44px; left: 0; right: 0; bottom: 140px; }
+#elevation {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 140px;
+  background: #1a1a1a; border-top: 1px solid #333;
+}
+#elev-canvas { width: 100%; height: 100%; display: block; }
+#elev-tip {
+  position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,0.8); color: #f5e400; font-size: 11px;
+  padding: 3px 8px; border-radius: 3px; pointer-events: none;
+  white-space: nowrap; opacity: 0;
+}
+#elev-cur {
+  position: absolute; top: 0; bottom: 0; width: 1px;
+  background: #f5e400; pointer-events: none; opacity: 0;
+}
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <h1>GPX Editor</h1>
+  <button class="primary" id="btn-open" onclick="document.getElementById('file-in').click()">Abrir GPX</button>
+  <input type="file" id="file-in" accept=".gpx" style="display:none">
+  <button id="btn-draw"   onclick="toggleMode('draw')">✏ Dibujar</button>
+  <button id="btn-delete" onclick="toggleMode('delete')">✕ Borrar</button>
+  <button onclick="undoLast()">↩ Deshacer</button>
+  <button onclick="clearAll()">🗑 Limpiar</button>
+  <button class="primary" onclick="exportGPX()">↓ Exportar GPX</button>
+  <span id="info">0 puntos — modo dibujar activo</span>
+</div>
+
+<div id="map"></div>
+
+<div id="elevation">
+  <canvas id="elev-canvas"></canvas>
+  <div id="elev-tip"></div>
+  <div id="elev-cur"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+
+// ── Estado ──────────────────────────────────────────────────────────────────
+var points   = []
+var markers  = []
+var polyline = null
+var undo_stack  = []
+var mode     = 'draw'
+var filename = 'nueva-ruta.gpx'
+var hoverMark = null
+var pinMark   = null
+
+var map = L.map('map').setView([-33.399, -70.903], 14)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap', maxZoom: 19
+}).addTo(map)
+
+// ── Modos ────────────────────────────────────────────────────────────────────
+function toggleMode(m) {
+  mode = (mode === m) ? 'none' : m
+  document.getElementById('btn-draw').className   = mode === 'draw'   ? 'active-draw' : ''
+  document.getElementById('btn-delete').className = mode === 'delete' ? 'active-del'  : ''
+  map.getContainer().style.cursor = mode === 'draw' ? 'crosshair' : ''
+  updateInfo()
+}
+
+function updateInfo() {
+  var modeStr = mode === 'draw' ? ' — ✏ dibujando' : mode === 'delete' ? ' — ✕ borrar' : ''
+  document.getElementById('info').textContent = points.length + ' puntos' + modeStr
+}
+
+// ── Historia ─────────────────────────────────────────────────────────────────
+function saveHistory() {
+  undo_stack.push(JSON.parse(JSON.stringify(points)))
+  if (undo_stack.length > 50) undo_stack.shift()
+}
+
+function undoLast() {
+  if (!undo_stack.length) return
+  points = undo_stack.pop()
+  render()
+}
+
+function clearAll() {
+  if (points.length && !confirm('¿Borrar toda la ruta?')) return
+  saveHistory()
+  points = []
+  render()
+}
+
+// ── Render ───────────────────────────────────────────────────────────────────
+function render() {
+  markers.forEach(function(m) { map.removeLayer(m) })
+  markers = []
+  if (polyline) map.removeLayer(polyline)
+
+  if (!points.length) { updateInfo(); drawElevation(); return }
+
+  var latlngs = points.map(function(p) { return [p.lat, p.lon] })
+  polyline = L.polyline(latlngs, { color: '#f5e400', weight: 3 }).addTo(map)
+
+  points.forEach(function(p, i) {
+    var isFirst = i === 0
+    var isLast  = i === points.length - 1
+    var size    = (isFirst || isLast) ? 12 : 7
+    var color   = isFirst ? '#22c55e' : isLast ? '#ef4444' : '#f5e400'
+    var cursor  = mode === 'delete' ? 'crosshair' : 'grab'
+
+    var total = size + 4
+    var icon = L.divIcon({
+      className: '',
+      html: '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + color + ';border:2px solid #000;cursor:' + cursor + ';margin:2px"></div>',
+      iconSize: [total, total],
+      iconAnchor: [total/2, total/2]
+    })
+
+    var m = L.marker([p.lat, p.lon], { icon: icon, draggable: mode !== 'delete' }).addTo(map)
+
+    ;(function(idx) {
+      m.on('click', function() {
+        if (mode === 'delete') {
+          saveHistory()
+          points.splice(idx, 1)
+          render()
+        }
+      })
+      m.on('dragend', function(e) {
+        saveHistory()
+        var ll = e.target.getLatLng()
+        points[idx].lat = +ll.lat.toFixed(7)
+        points[idx].lon = +ll.lng.toFixed(7)
+        render()
+      })
+    })(i)
+
+    markers.push(m)
+  })
+
+  updateInfo()
+  drawElevation()
+}
+
+// ── Click en mapa para dibujar ───────────────────────────────────────────────
+map.on('click', function(e) {
+  if (mode !== 'draw') return
+  var lat = +e.latlng.lat.toFixed(7)
+  var lon = +e.latlng.lng.toFixed(7)
+  saveHistory()
+  points.push({ lat: lat, lon: lon, ele: null, time: null })
+  render()
+  // fetch elevación async
+  fetch('https://api.open-elevation.com/api/v1/lookup?locations=' + lat + ',' + lon)
+    .then(function(r) { return r.json() })
+    .then(function(d) {
+      var ele = d.results && d.results[0] ? d.results[0].elevation : null
+      if (ele !== null) {
+        // encontrar el punto por coordenadas
+        for (var i = points.length - 1; i >= 0; i--) {
+          if (points[i].lat === lat && points[i].lon === lon) {
+            points[i].ele = ele.toFixed(1)
+            break
+          }
+        }
+        drawElevation()
+      }
+    })
+    .catch(function() {})
+})
+
+// ── Cargar GPX ───────────────────────────────────────────────────────────────
+function loadGPX(text, fname) {
+  filename = fname.replace('.gpx', '_edited.gpx')
+  var parser = new DOMParser()
+  var doc = parser.parseFromString(text, 'application/xml')
+  var trkpts = doc.querySelectorAll('trkpt')
+  points = Array.from(trkpts).map(function(pt) {
+    return {
+      lat:  +pt.getAttribute('lat'),
+      lon:  +pt.getAttribute('lon'),
+      ele:  pt.querySelector('ele')  ? pt.querySelector('ele').textContent  : null,
+      time: pt.querySelector('time') ? pt.querySelector('time').textContent : null
+    }
+  })
+  undo_stack = []
+  mode = 'none'
+  document.getElementById('btn-draw').className   = ''
+  document.getElementById('btn-delete').className = ''
+  map.getContainer().style.cursor = ''
+  render()
+  if (points.length && polyline) map.fitBounds(polyline.getBounds(), { padding: [30, 30] })
+}
+
+document.getElementById('file-in').addEventListener('change', function(e) {
+  var file = e.target.files[0]
+  if (!file) return
+  var reader = new FileReader()
+  reader.onload = function(ev) { loadGPX(ev.target.result, file.name) }
+  reader.readAsText(file)
+})
+
+document.addEventListener('dragover', function(e) { e.preventDefault() })
+document.addEventListener('drop', function(e) {
+  e.preventDefault()
+  var file = e.dataTransfer.files[0]
+  if (!file || !file.name.endsWith('.gpx')) return
+  var reader = new FileReader()
+  reader.onload = function(ev) { loadGPX(ev.target.result, file.name) }
+  reader.readAsText(file)
+})
+
+// ── Exportar GPX ─────────────────────────────────────────────────────────────
+function exportGPX() {
+  if (!points.length) { alert('No hay puntos'); return }
+  var lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<gpx version="1.1" creator="gpx-editor" xmlns="http://www.topografix.com/GPX/1/1">',
+    '<trk><name>' + filename + '</name><trkseg>'
+  ]
+  points.forEach(function(p) {
+    var s = '<trkpt lat="' + p.lat + '" lon="' + p.lon + '">'
+    if (p.ele  !== null) s += '<ele>'  + p.ele  + '</ele>'
+    if (p.time !== null) s += '<time>' + p.time + '</time>'
+    s += '</trkpt>'
+    lines.push(s)
+  })
+  lines.push('</trkseg></trk></gpx>')
+  var blob = new Blob([lines.join('\n')], { type: 'application/gpx+xml' })
+  var a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = filename
+  a.click()
+}
+
+// ── Altimetría ───────────────────────────────────────────────────────────────
+function drawElevation() {
+  var canvas = document.getElementById('elev-canvas')
+  var cont   = document.getElementById('elevation')
+  canvas.width  = cont.clientWidth
+  canvas.height = cont.clientHeight
+  var ctx = canvas.getContext('2d')
+  var W = canvas.width, H = canvas.height
+  var pad = { top: 16, bottom: 24, left: 44, right: 10 }
+
+  ctx.clearRect(0, 0, W, H)
+
+  var eles = points.map(function(p) { return parseFloat(p.ele) || 0 })
+  if (eles.length < 2) return
+
+  var minE = Math.min.apply(null, eles)
+  var maxE = Math.max.apply(null, eles)
+  var range = maxE - minE || 1
+
+  var dists = [0]
+  for (var i = 1; i < points.length; i++) {
+    var a = points[i-1], b = points[i]
+    var dx = (b.lon - a.lon) * Math.cos(a.lat * Math.PI / 180) * 111320
+    var dy = (b.lat - a.lat) * 111320
+    dists.push(dists[i-1] + Math.sqrt(dx*dx + dy*dy))
+  }
+  var totalDist = dists[dists.length-1] || 1
+
+  function xOf(d) { return pad.left + (d / totalDist) * (W - pad.left - pad.right) }
+  function yOf(e) { return pad.top  + (1 - (e - minE) / range) * (H - pad.top - pad.bottom) }
+
+  // fill gradiente
+  var grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom)
+  grad.addColorStop(0, 'rgba(245,228,0,0.45)')
+  grad.addColorStop(1, 'rgba(245,228,0,0.04)')
+  ctx.beginPath()
+  ctx.moveTo(xOf(dists[0]), yOf(eles[0]))
+  for (var j = 1; j < points.length; j++) ctx.lineTo(xOf(dists[j]), yOf(eles[j]))
+  ctx.lineTo(xOf(totalDist), H - pad.bottom)
+  ctx.lineTo(xOf(0), H - pad.bottom)
+  ctx.closePath()
+  ctx.fillStyle = grad
+  ctx.fill()
+
+  // línea
+  ctx.beginPath()
+  ctx.moveTo(xOf(dists[0]), yOf(eles[0]))
+  for (var k = 1; k < points.length; k++) ctx.lineTo(xOf(dists[k]), yOf(eles[k]))
+  ctx.strokeStyle = '#f5e400'
+  ctx.lineWidth = 2
+  ctx.stroke()
+
+  // grillas + labels Y
+  ctx.font = '10px sans-serif'
+  ctx.fillStyle = '#555'
+  ctx.textAlign = 'right'
+  ;[0, 0.5, 1].forEach(function(f) {
+    var e = minE + f * range
+    var y = yOf(e)
+    ctx.fillText(Math.round(e) + 'm', pad.left - 4, y + 3)
+    ctx.beginPath(); ctx.strokeStyle = '#2a2a2a'; ctx.lineWidth = 1
+    ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke()
+  })
+
+  // labels X
+  ctx.fillStyle = '#555'; ctx.textAlign = 'center'
+  var kmStep = totalDist > 20000 ? 5000 : totalDist > 5000 ? 2000 : 1000
+  for (var d = 0; d <= totalDist; d += kmStep) {
+    ctx.fillText((d/1000).toFixed(0) + 'km', xOf(d), H - 5)
+  }
+
+  canvas._dists = dists
+  canvas._xOf   = xOf
+  canvas._eles  = eles
+}
+
+document.getElementById('elev-canvas').addEventListener('mousemove', function(e) {
+  var canvas = document.getElementById('elev-canvas')
+  if (!canvas._dists || !points.length) return
+  var rect = canvas.getBoundingClientRect()
+  var mx   = (e.clientX - rect.left) * (canvas.width / rect.width)
+
+  var best = 0, bestDx = Infinity
+  canvas._dists.forEach(function(d, i) {
+    var dx = Math.abs(canvas._xOf(d) - mx)
+    if (dx < bestDx) { bestDx = dx; best = i }
+  })
+
+  var p    = points[best]
+  var dist = canvas._dists[best]
+  var ele  = parseFloat(p.ele) || 0
+  var timeStr = ''
+  if (p.time) {
+    var t = new Date(p.time)
+    timeStr = ' · ' + t.getHours().toString().padStart(2,'0') + ':' +
+              t.getMinutes().toString().padStart(2,'0') + ':' +
+              t.getSeconds().toString().padStart(2,'0')
+  }
+
+  var tip = document.getElementById('elev-tip')
+  tip.textContent = 'Punto ' + (best+1) + ' · ' + (dist/1000).toFixed(2) + ' km · ' + Math.round(ele) + ' m' + timeStr
+  tip.style.opacity = '1'
+  tip.style.left = Math.min(Math.max(e.clientX - rect.left, 80), rect.width - 80) + 'px'
+
+  var cur = document.getElementById('elev-cur')
+  cur.style.left = (e.clientX - rect.left) + 'px'
+  cur.style.opacity = '1'
+
+  if (hoverMark) map.removeLayer(hoverMark)
+  hoverMark = L.circleMarker([p.lat, p.lon], {
+    radius: 7, color: '#fff', fillColor: '#f5e400', fillOpacity: 1, weight: 2
+  }).addTo(map)
+})
+
+document.getElementById('elev-canvas').addEventListener('click', function(e) {
+  var canvas = document.getElementById('elev-canvas')
+  if (!canvas._dists || !points.length) return
+  var rect = canvas.getBoundingClientRect()
+  var mx   = (e.clientX - rect.left) * (canvas.width / rect.width)
+  var best = 0, bestDx = Infinity
+  canvas._dists.forEach(function(d, i) {
+    var dx = Math.abs(canvas._xOf(d) - mx)
+    if (dx < bestDx) { bestDx = dx; best = i }
+  })
+  var p = points[best]
+  if (pinMark) map.removeLayer(pinMark)
+  pinMark = L.circleMarker([p.lat, p.lon], {
+    radius: 12, color: '#ff0000', fillColor: '#ff0000', fillOpacity: 0.3, weight: 3
+  }).addTo(map)
+  map.panTo([p.lat, p.lon])
+})
+
+document.getElementById('elev-canvas').addEventListener('mouseleave', function() {
+  document.getElementById('elev-tip').style.opacity = '0'
+  document.getElementById('elev-cur').style.opacity = '0'
+  if (hoverMark) { map.removeLayer(hoverMark); hoverMark = null }
+})
+
+window.addEventListener('resize', function() { if (points.length) drawElevation() })
+
+// arrancar en modo dibujar
+toggleMode('draw')
+
+</script>
+</body>
+</html>
