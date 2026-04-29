@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import elevationData from '../config/elevation.json'
 
 const { points, totalKm, gain, minEle, maxEle } = elevationData
@@ -219,13 +220,15 @@ export default function Altimetria() {
     </div>
 
     {/* Fullscreen landscape modal */}
-    {fullscreen && (
+    {fullscreen && createPortal(
       <div
         className="fixed inset-0 z-[9999] flex flex-col"
         style={{ background: '#0a0a0a' }}
-        onClick={(e) => { if (e.target === e.currentTarget) setFullscreen(false) }}
       >
-        <div className="flex items-center justify-between px-4 py-3 flex-shrink-0">
+        <div className="flex-1 px-4 pt-4 min-h-0">
+          {renderChart(fsSvgRef, 'eleGradFs')}
+        </div>
+        <div className="flex items-center justify-between px-4 py-4 pb-8 flex-shrink-0 border-t border-white/10">
           <div className="flex items-center gap-3 flex-wrap">
             {legend.map(l => (
               <div key={l.label} className="flex items-center gap-1.5">
@@ -235,19 +238,16 @@ export default function Altimetria() {
             ))}
           </div>
           <button
+            onTouchEnd={(e) => { e.preventDefault(); e.stopPropagation(); setFullscreen(false) }}
             onClick={() => setFullscreen(false)}
-            className="bg-white/10 hover:bg-white/20 text-white rounded-full p-3 ml-4 flex-shrink-0"
-            aria-label="Cerrar"
+            className="bg-[#e6c200] active:bg-[#cca800] text-black rounded-lg px-4 py-2 ml-4 flex-shrink-0 uppercase tracking-wider text-sm font-bold"
+            style={{ touchAction: 'auto', minHeight: '44px', fontFamily: 'Barlow Condensed' }}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-7 h-7">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
+            ← Volver
           </button>
         </div>
-        <div className="flex-1 px-4 pb-4 min-h-0">
-          {renderChart(fsSvgRef, 'eleGradFs')}
-        </div>
-      </div>
+      </div>,
+      document.body
     )}
     </>
   )

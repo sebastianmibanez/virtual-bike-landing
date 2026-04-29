@@ -853,8 +853,8 @@ function cvbk_email_base(string $contenido): string {
       <tr><td align='center'>
         <table width='560' cellpadding='0' cellspacing='0' style='background:#0a0a0a;border-radius:8px;overflow:hidden;max-width:560px;width:100%'>
           <!-- Header -->
-          <tr><td style='background:#111;padding:24px 32px;border-bottom:3px solid #f5e400'>
-            <div style='color:#f5e400;font-size:22px;font-weight:900;letter-spacing:2px;text-transform:uppercase'>Clásica CVBK 2026</div>
+          <tr><td style='background:#111;padding:24px 32px;border-bottom:3px solid #e6c200'>
+            <div style='color:#e6c200;font-size:22px;font-weight:900;letter-spacing:2px;text-transform:uppercase'>Clásica CVBK 2026</div>
             <div style='color:#555;font-size:12px;margin-top:4px'>21 de Mayo · Alto Noviciado · Virtual-Bike.cl</div>
           </td></tr>
           <!-- Contenido -->
@@ -863,7 +863,7 @@ function cvbk_email_base(string $contenido): string {
           </td></tr>
           <!-- Footer -->
           <tr><td style='background:#111;padding:20px 32px;border-top:1px solid #222;text-align:center'>
-            <div style='color:#444;font-size:11px'>Clásica Virtual Bike 2026 · <a href='https://virtual-bike.cl' style='color:#f5e400;text-decoration:none'>virtual-bike.cl</a></div>
+            <div style='color:#444;font-size:11px'>Clásica Virtual Bike 2026 · <a href='https://virtual-bike.cl' style='color:#e6c200;text-decoration:none'>virtual-bike.cl</a></div>
             <div style='color:#333;font-size:11px;margin-top:4px'>Este correo fue enviado automáticamente, no respondas a este mensaje.</div>
           </td></tr>
         </table>
@@ -893,14 +893,14 @@ function cvbk_email_reserva(object $inscrito): void {
         <tr><td style='color:#666;padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px'>Nombre</td><td style='padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px;text-align:right'>{$nombre}</td></tr>
         <tr><td style='color:#666;padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px'>RUT</td><td style='padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px;text-align:right'>{$rut}</td></tr>
         <tr><td style='color:#666;padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px'>Categoría</td><td style='padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px;text-align:right'>{$cat}</td></tr>
-        <tr><td style='color:#666;padding:10px 0;font-size:13px'>Valor</td><td style='padding:10px 0;font-size:16px;font-weight:bold;color:#f5e400;text-align:right'>\$40.000 CLP</td></tr>
+        <tr><td style='color:#666;padding:10px 0;font-size:13px'>Valor</td><td style='padding:10px 0;font-size:16px;font-weight:bold;color:#e6c200;text-align:right'>\$40.000 CLP</td></tr>
       </table>
-      <div style='background:#1a1a1a;border:1px solid #f5e400;border-radius:6px;padding:16px;margin-bottom:24px'>
-        <p style='margin:0;color:#f5e400;font-size:13px;font-weight:bold'>⚠️ Tu cupo no está confirmado aún</p>
+      <div style='background:#1a1a1a;border:1px solid #e6c200;border-radius:6px;padding:16px;margin-bottom:24px'>
+        <p style='margin:0;color:#e6c200;font-size:13px;font-weight:bold'>⚠️ Tu cupo no está confirmado aún</p>
         <p style='margin:8px 0 0;color:#aaa;font-size:12px'>Haz clic en el botón de abajo para completar el pago y asegurar tu lugar.</p>
       </div>
       <table width='100%' cellpadding='0' cellspacing='0' style='margin-bottom:20px'><tr><td align='center'>
-        <a href='https://virtual-bike.cl/?pagar={$inscrito->id}#inscripcion' style='display:inline-block;background:#f5e400;color:#000;font-weight:900;font-size:15px;padding:16px 40px;border-radius:6px;text-decoration:none;letter-spacing:1px;text-transform:uppercase'>Completar pago →</a>
+        <a href='https://virtual-bike.cl/?pagar={$inscrito->id}#inscripcion' style='display:inline-block;background:#e6c200;color:#000;font-weight:900;font-size:15px;padding:16px 40px;border-radius:6px;text-decoration:none;letter-spacing:1px;text-transform:uppercase'>Completar pago →</a>
       </td></tr></table>
       <p style='color:#555;font-size:12px;margin:0'>Las inscripciones sin pago pueden ser liberadas si se agota el cupo.</p>";
 
@@ -916,35 +916,64 @@ function cvbk_email_pago_confirmado(object $inscrito): void {
     $order        = $inscrito->order_id ? wc_get_order($inscrito->order_id) : null;
     $valor_pagado = $order ? '$' . number_format($order->get_total(), 0, ',', '.') . ' CLP' : '$40.000 CLP';
     $qr_url       = 'https://virtual-bike.cl/wp-json/cvbk/v1/verificar?id=' . intval($inscrito->id) . '&token=' . cvbk_token_verificacion(intval($inscrito->id));
-    $qr_img       = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($qr_url);
+    $qr_img       = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' . urlencode($qr_url);
 
     $contenido = "
-      <p style='font-size:18px;font-weight:bold;margin:0 0 8px'>¡Pago confirmado! 🎉</p>
-      <p style='color:#aaa;margin:0 0 24px'>Tu inscripción está 100% confirmada. ¡Nos vemos el 21 de mayo!</p>
-      <div style='background:#0d2010;border:1px solid #22c55e;border-radius:6px;padding:16px;margin-bottom:24px;text-align:center'>
-        <div style='color:#22c55e;font-size:28px;font-weight:900'>✓ INSCRITO</div>
-        <div style='color:#aaa;font-size:12px;margin-top:4px'>Clásica Virtual Bike 2026</div>
+      <!-- Línea dorada top -->
+      <div style='height:3px;background:linear-gradient(90deg,transparent,#e6c200,transparent);margin-bottom:28px'></div>
+
+      <!-- Header con check -->
+      <table cellpadding='0' cellspacing='0' style='margin-bottom:28px'><tr>
+        <td style='vertical-align:middle;padding-right:14px'>
+          <div style='width:44px;height:44px;border-radius:50%;background:#0d2010;border:2px solid #22c55e;text-align:center;line-height:44px;font-size:20px'>✓</div>
+        </td>
+        <td style='vertical-align:middle'>
+          <p style='margin:0;color:#22c55e;font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:bold'>Pago confirmado</p>
+          <p style='margin:4px 0 0;color:#fff;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:1px'>¡Nos vemos el 21 de mayo!</p>
+        </td>
+      </tr></table>
+
+      <!-- Badge INSCRITO -->
+      <div style='background:#0d2010;border:2px solid #22c55e;border-radius:12px;padding:28px 20px;margin-bottom:28px;text-align:center'>
+        <div style='color:#22c55e;font-size:42px;font-weight:900;letter-spacing:3px;text-shadow:0 0 20px rgba(34,197,94,0.3)'>✓ INSCRITO</div>
+        <div style='color:rgba(255,255,255,0.4);font-size:13px;margin-top:6px;text-transform:uppercase;letter-spacing:3px'>Clásica Virtual Bike 2026</div>
       </div>
-      <table width='100%' cellpadding='0' cellspacing='0' style='border-collapse:collapse;margin-bottom:24px'>
-        <tr><td style='color:#666;padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px'>Nombre</td><td style='padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px;text-align:right'>{$nombre}</td></tr>
-        <tr><td style='color:#666;padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px'>RUT</td><td style='padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px;text-align:right'>{$rut}</td></tr>
-        <tr><td style='color:#666;padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px'>Categoría</td><td style='padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px;text-align:right'>{$cat}</td></tr>
-        <tr><td style='color:#666;padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px'>N° orden</td><td style='padding:10px 0;border-bottom:1px solid #1e1e1e;font-size:13px;text-align:right'>{$order_id}</td></tr>
-        <tr><td style='color:#666;padding:10px 0;font-size:13px'>Valor pagado</td><td style='padding:10px 0;font-size:16px;font-weight:bold;color:#22c55e;text-align:right'>{$valor_pagado}</td></tr>
-      </table>
-      <div style='background:#1a1a1a;border-radius:6px;padding:20px;margin-bottom:20px;text-align:center'>
-        <p style='margin:0 0 12px;color:#f5e400;font-size:13px;font-weight:bold'>📱 Tu código de acceso</p>
-        <img src='{$qr_img}' width='160' height='160' alt='QR inscripción' style='border:4px solid #f5e400;border-radius:4px' />
-        <p style='margin:10px 0 0;color:#555;font-size:11px'>Muestra este QR en la acreditación del evento</p>
+
+      <!-- Datos del corredor -->
+      <div style='background:#111;border:1px solid #1e1e1e;border-radius:10px;overflow:hidden;margin-bottom:28px'>
+        <div style='background:#161616;padding:12px 20px;border-bottom:1px solid #1e1e1e'>
+          <p style='margin:0;color:rgba(255,255,255,0.4);font-size:10px;text-transform:uppercase;letter-spacing:3px;font-weight:bold'>Datos de inscripción</p>
+        </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='border-collapse:collapse'>
+          <tr><td style='color:#888;padding:14px 20px;border-bottom:1px solid #1a1a1a;font-size:13px'>Nombre</td><td style='color:#fff;padding:14px 20px;border-bottom:1px solid #1a1a1a;font-size:13px;text-align:right;font-weight:600'>{$nombre}</td></tr>
+          <tr><td style='color:#888;padding:14px 20px;border-bottom:1px solid #1a1a1a;font-size:13px'>RUT</td><td style='color:#fff;padding:14px 20px;border-bottom:1px solid #1a1a1a;font-size:13px;text-align:right;font-weight:600'>{$rut}</td></tr>
+          <tr><td style='color:#888;padding:14px 20px;border-bottom:1px solid #1a1a1a;font-size:13px'>Categoría</td><td style='color:#fff;padding:14px 20px;border-bottom:1px solid #1a1a1a;font-size:13px;text-align:right;font-weight:600'>{$cat}</td></tr>
+          <tr><td style='color:#888;padding:14px 20px;border-bottom:1px solid #1a1a1a;font-size:13px'>N° orden</td><td style='color:#fff;padding:14px 20px;border-bottom:1px solid #1a1a1a;font-size:13px;text-align:right;font-weight:600'>{$order_id}</td></tr>
+          <tr><td style='color:#888;padding:14px 20px;font-size:13px'>Valor pagado</td><td style='padding:14px 20px;font-size:18px;font-weight:900;color:#e6c200;text-align:right'>{$valor_pagado}</td></tr>
+        </table>
       </div>
-      <div style='background:#1a1a1a;border-radius:6px;padding:16px'>
-        <p style='margin:0 0 8px;color:#fff;font-size:13px;font-weight:bold'>📍 Información del evento</p>
-        <p style='margin:0;color:#aaa;font-size:12px;line-height:1.8'>
+
+      <!-- QR Code -->
+      <div style='background:linear-gradient(180deg,rgba(230,194,0,0.08) 0%,rgba(0,0,0,0) 100%);border:1px solid rgba(230,194,0,0.25);border-radius:12px;padding:32px 20px;margin-bottom:28px;text-align:center'>
+        <p style='margin:0 0 16px;color:#e6c200;font-size:14px;font-weight:bold;text-transform:uppercase;letter-spacing:2px'>🎫 Tu código de acceso</p>
+        <div style='display:inline-block;background:#fff;padding:12px;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.5)'>
+          <img src='{$qr_img}' width='180' height='180' alt='QR inscripción' style='display:block' />
+        </div>
+        <p style='margin:16px 0 0;color:rgba(255,255,255,0.35);font-size:12px'>Muestra este QR en la carpa de acreditación el día del evento</p>
+      </div>
+
+      <!-- Info evento -->
+      <div style='background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:20px'>
+        <p style='margin:0 0 12px;color:#e6c200;font-size:10px;text-transform:uppercase;letter-spacing:3px;font-weight:bold'>📍 Información del evento</p>
+        <p style='margin:0;color:rgba(255,255,255,0.6);font-size:13px;line-height:2'>
           📅 Miércoles 21 de mayo de 2026<br>
           📌 Alto Noviciado, Región Metropolitana<br>
           🚴 Salida por categorías desde las 8:00 hrs
         </p>
-      </div>";
+      </div>
+
+      <!-- Línea dorada bottom -->
+      <div style='height:2px;background:linear-gradient(90deg,transparent,#e6c200,transparent);margin-top:28px'></div>";
 
     cvbk_send($inscrito->email, '✅ Pago confirmado — ¡Estás inscrito en la Clásica CVBK 2026!', cvbk_email_base($contenido));
 

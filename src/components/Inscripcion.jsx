@@ -219,7 +219,7 @@ export default function Inscripcion({ genero, setGenero }) {
               onClick={() => { setGenero(val); track('genero_click') }}
               className={`flex items-center justify-center gap-2 py-4 px-4 transition-all ${
                 genero === val
-                  ? 'bg-[#e6c200] text-black'
+                  ? 'bg-[#f5e400] text-black'
                   : 'bg-[#080808] text-white/50 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -237,7 +237,7 @@ export default function Inscripcion({ genero, setGenero }) {
         {/* Precio + checklist */}
         <div className="mb-10 flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
           <div className="flex-shrink-0">
-            <div className="text-6xl md:text-7xl text-[#e6c200] leading-none" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
+            <div className="text-6xl md:text-7xl text-[#f5e400] leading-none" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
               $40.000
             </div>
             <p className="text-white/40 text-[10px] md:text-xs mt-2 tracking-[0.2em] uppercase">CLP · Inscripción única</p>
@@ -245,7 +245,7 @@ export default function Inscripcion({ genero, setGenero }) {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3 flex-1">
             {['Medallón finisher (200 primeros)', 'Premios en dinero + sorteos', 'Fotos y videos GRATIS', '3 metas volantes por grupo', 'Tercer tiempo incluido', 'Tricota Champion al 1°'].map((item) => (
               <div key={item} className="flex items-start gap-2">
-                <span className="text-[#e6c200] mt-0.5 text-xs">✓</span>
+                <span className="text-[#f5e400] mt-0.5 text-xs">✓</span>
                 <span className="text-white/80 text-xs md:text-sm leading-snug">{item}</span>
               </div>
             ))}
@@ -285,7 +285,7 @@ export default function Inscripcion({ genero, setGenero }) {
 
                     <div className="pt-2">
                       <label className="block text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700, letterSpacing: '0.15em' }}>
-                        Categoría <span className="text-[#e6c200]">*</span>
+                        Categoría <span className="text-[#f5e400]">*</span>
                       </label>
                       <select
                         name="categoria" value={form.categoria} onChange={handleChange}
@@ -302,7 +302,7 @@ export default function Inscripcion({ genero, setGenero }) {
 
                     <div className="pt-2">
                       <label className="block text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700, letterSpacing: '0.15em' }}>
-                        Número de dorsal preferido <span className="text-[#e6c200]">*</span>
+                        Número de dorsal preferido <span className="text-[#f5e400]">*</span>
                       </label>
                       <select
                         name="dorsal" value={form.dorsal} onChange={handleChange}
@@ -340,7 +340,7 @@ export default function Inscripcion({ genero, setGenero }) {
         {paso === 2 && (
           <div>
             <div className="mb-6 pb-5 border-b border-white/10">
-              <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+              <p className="text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
                 Cupo reservado ✓
               </p>
               <h3 className="text-xl md:text-2xl text-white uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
@@ -365,7 +365,7 @@ export default function Inscripcion({ genero, setGenero }) {
               ))}
               <div className="flex items-center justify-between gap-4 pt-3 border-t border-white/10">
                 <span className="text-white/40 text-xs uppercase tracking-widest" style={{ fontFamily: 'Barlow Condensed' }}>Total</span>
-                <span className="text-[#e6c200] text-xl font-black" style={{ fontFamily: 'Barlow Condensed' }}>$40.000 CLP</span>
+                <span className="text-[#f5e400] text-xl font-black" style={{ fontFamily: 'Barlow Condensed' }}>$40.000 CLP</span>
               </div>
             </div>
 
@@ -378,56 +378,79 @@ export default function Inscripcion({ genero, setGenero }) {
         {/* ── PASO 3: Pago confirmado + QR ── */}
         {paso === 3 && inscritoPagado && (
           <div>
-            <div className="mb-6 pb-5 border-b border-white/10">
-              <p className="text-[#22c55e] text-xs uppercase tracking-[0.3em] mb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
-                Pago confirmado ✓
-              </p>
-              <h3 className="text-xl md:text-2xl text-white uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
-                ¡Estás inscrito!
-              </h3>
-            </div>
-
-            <div className="bg-[#0d2010] border border-[#22c55e]/40 p-6 mb-6 text-center">
-              <div className="text-[#22c55e] text-4xl font-black mb-1" style={{ fontFamily: 'Barlow Condensed', letterSpacing: '0.08em' }}>
-                ✓ INSCRITO
+            {/* Header celebración */}
+            <div className="relative mb-8 pb-6 border-b border-[#22c55e]/30">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#22c55e] to-transparent" />
+              <div className="flex items-center gap-3 mt-4 mb-2">
+                <div className="w-10 h-10 rounded-full bg-[#22c55e]/20 flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="3" className="w-5 h-5"><path d="M20 6L9 17l-5-5" /></svg>
+                </div>
+                <div>
+                  <p className="text-[#22c55e] text-sm uppercase tracking-[0.2em]" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+                    Pago confirmado
+                  </p>
+                  <h3 className="text-2xl md:text-3xl text-white uppercase leading-none" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
+                    ¡Nos vemos el 21 de mayo!
+                  </h3>
+                </div>
               </div>
-              <div className="text-white/40 text-xs uppercase tracking-widest">Clásica Virtual Bike 2026</div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-6 mb-6 space-y-3">
-              {[
-                ['Nombre',    `${inscritoPagado.nombre} ${inscritoPagado.apellido}`],
-                ['RUT',       inscritoPagado.rut],
-                ['Categoría', inscritoPagado.categoria],
-              ].map(([label, val]) => (
-                <div key={label} className="flex items-center justify-between gap-4">
-                  <span className="text-white/40 text-xs uppercase tracking-widest" style={{ fontFamily: 'Barlow Condensed' }}>{label}</span>
-                  <span className="text-white text-sm">{val}</span>
+            {/* Badge INSCRITO */}
+            <div className="relative mb-8 p-8 text-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #0d2010 0%, #081a0c 100%)', border: '2px solid rgba(34,197,94,0.5)', borderRadius: '12px' }}>
+              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(34,197,94,0.1) 10px, rgba(34,197,94,0.1) 11px)' }} />
+              <div className="relative">
+                <div className="text-[#22c55e] text-5xl md:text-6xl font-black mb-1" style={{ fontFamily: 'Barlow Condensed', letterSpacing: '0.08em', textShadow: '0 0 30px rgba(34,197,94,0.3)' }}>
+                  ✓ INSCRITO
                 </div>
-              ))}
+                <div className="text-white/50 text-sm uppercase tracking-[0.3em]" style={{ fontFamily: 'Barlow Condensed' }}>Clásica Virtual Bike 2026</div>
+              </div>
             </div>
 
+            {/* Datos del corredor */}
+            <div className="mb-8 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="px-5 py-3 bg-white/5 border-b border-white/8">
+                <p className="text-white/50 text-[10px] uppercase tracking-[0.3em]" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>Datos de inscripción</p>
+              </div>
+              <div className="divide-y divide-white/5">
+                {[
+                  ['Nombre',    `${inscritoPagado.nombre} ${inscritoPagado.apellido}`],
+                  ['RUT',       inscritoPagado.rut],
+                  ['Categoría', inscritoPagado.categoria],
+                  ...(inscritoPagado.n_orden ? [['N° orden', `#${inscritoPagado.n_orden}`]] : []),
+                  ...(inscritoPagado.valor ? [['Valor pagado', <span className="text-[#e6c200] font-bold">${inscritoPagado.valor} CLP</span>]] : []),
+                ].map(([label, val]) => (
+                  <div key={label} className="flex items-center justify-between gap-4 px-5 py-3">
+                    <span className="text-white/40 text-xs uppercase tracking-widest" style={{ fontFamily: 'Barlow Condensed' }}>{label}</span>
+                    <span className="text-white text-sm font-medium">{val}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* QR Code */}
             {inscritoPagado.qr_img && (
-              <div className="bg-white/5 border border-white/10 p-6 mb-6 flex flex-col items-center gap-4">
-                <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em]" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
-                  Tu código de acreditación
+              <div className="mb-8 rounded-xl p-8 flex flex-col items-center gap-5" style={{ background: 'linear-gradient(180deg, rgba(230,194,0,0.05) 0%, rgba(0,0,0,0) 100%)', border: '1px solid rgba(230,194,0,0.2)' }}>
+                <p className="text-[#e6c200] text-sm uppercase tracking-[0.25em]" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+                  🎫 Tu código de acceso
                 </p>
-                <div className="bg-white p-3 rounded">
-                  <img src={inscritoPagado.qr_img} alt="QR inscripción" width={220} height={220} />
+                <div className="bg-white p-4 rounded-lg shadow-2xl shadow-black/50">
+                  <img src={inscritoPagado.qr_img} alt="QR inscripción" width={200} height={200} />
                 </div>
-                <p className="text-white/30 text-xs text-center">Muestra este QR en la carpa de acreditación el día del evento</p>
+                <p className="text-white/40 text-xs text-center max-w-[280px]">Muestra este QR en la carpa de acreditación el día del evento</p>
               </div>
             )}
 
-            <div className="bg-white/5 border border-white/10 p-5">
-              <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
-                Información del evento
+            {/* Info evento */}
+            <div className="rounded-xl p-5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <p className="text-[#e6c200] text-[10px] uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+                📍 Información del evento
               </p>
-              <p className="text-white/60 text-sm leading-relaxed">
-                📅 Miércoles 21 de mayo de 2026<br />
-                📌 Alto Noviciado, Región Metropolitana<br />
-                🚴 Salida por categorías desde las 8:00 hrs
-              </p>
+              <div className="space-y-2 text-white/60 text-sm">
+                <p>📅 Miércoles 21 de mayo de 2026</p>
+                <p>📌 Alto Noviciado, Región Metropolitana</p>
+                <p>🚴 Salida por categorías desde las 8:00 hrs</p>
+              </div>
             </div>
           </div>
         )}
@@ -448,7 +471,7 @@ export default function Inscripcion({ genero, setGenero }) {
               form="cvbk-form"
               type="submit"
               disabled={loadingGuardar}
-              className="w-full bg-[#e6c200] text-black py-10 text-3xl uppercase hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4"
+              className="w-full bg-[#f5e400] text-black py-10 text-3xl uppercase hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4"
               style={{ fontFamily: 'Barlow Condensed', fontWeight: 900, letterSpacing: '0.08em' }}
             >
               {loadingGuardar ? 'Guardando...' : <><span>Inscribirme a Clásica Virtual</span><span>→</span></>}
@@ -472,7 +495,7 @@ export default function Inscripcion({ genero, setGenero }) {
               <button
                 onClick={handlePagar}
                 disabled={loadingPagar}
-                className="w-full bg-[#e6c200] text-black py-10 text-3xl uppercase hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4"
+                className="w-full bg-[#f5e400] text-black py-10 text-3xl uppercase hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4"
                 style={{ fontFamily: 'Barlow Condensed', fontWeight: 900, letterSpacing: '0.08em' }}
               >
                 {loadingPagar ? 'Procesando...' : <><span>Pagar $40.000</span><span>→</span></>}
