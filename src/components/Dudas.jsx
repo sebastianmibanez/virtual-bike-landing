@@ -6,13 +6,14 @@ const IconWA = () => (
 
 export default function Dudas() {
   return (
-    <section className="bg-[#0a0a0a] py-20 border-t border-b border-white/5">
+    <section className="py-20 border-t border-b border-white/5">
       <div className="px-6 flex flex-row items-center justify-center gap-5" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
         <span className="text-white/60 text-2xl uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700, letterSpacing: '0.1em' }}>
           Dudas al
         </span>
         <a
           href="https://wa.me/56999542821"
+          aria-label="Contactar por WhatsApp"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 bg-[#25D366]/10 border border-[#25D366]/40 px-8 py-4 rounded-full hover:bg-[#25D366]/20 transition-all"

@@ -40,8 +40,7 @@ function LogoTile({ nombre, src, url }) {
       {url && (
         <div
           className="absolute inset-0 flex items-center justify-center bg-black/40"
-          style={{ transition: pressed ? 'opacity 150ms ease' : 'opacity 600ms ease' }}
-          style={{ opacity: pressed ? 1 : 0 }}
+          style={{ transition: pressed ? 'opacity 150ms ease' : 'opacity 600ms ease', opacity: pressed ? 1 : 0 }}
         >
           <span className="text-white text-xs uppercase tracking-widest" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
             Ver Instagram →

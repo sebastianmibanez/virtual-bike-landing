@@ -1,95 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-
-const tramosPorGenero = {
-  hombre: [
-    {
-      id: 'h-60',
-      badge: '+60 inscritos',
-      subtitulo: 'Cuando el grupo supera los 60 participantes',
-      puestos: [
-        { lugar: 1, premio: 100000, extra: 'Medallón + Tricota' },
-        { lugar: 2, premio: 80000,  extra: 'Medallón' },
-        { lugar: 3, premio: 70000,  extra: 'Medallón' },
-        { lugar: 4, premio: 60000,  extra: 'Medallón' },
-        { lugar: 5, premio: 50000,  extra: 'Medallón' },
-        { lugar: 6, premio: 40000,  extra: 'Medallón' },
-        { lugar: 7, premio: 40000,  extra: 'Medallón' },
-      ],
-    },
-    {
-      id: 'h-59',
-      badge: '-59 inscritos',
-      subtitulo: 'Entre 40 y 59 participantes en el grupo',
-      puestos: [
-        { lugar: 1, premio: 80000, extra: 'Medallón + Tricota' },
-        { lugar: 2, premio: 70000, extra: 'Medallón' },
-        { lugar: 3, premio: 60000, extra: 'Medallón' },
-        { lugar: 4, premio: 50000, extra: 'Medallón' },
-        { lugar: 5, premio: 40000, extra: 'Medallón' },
-      ],
-    },
-    {
-      id: 'h-39',
-      badge: '-39 inscritos',
-      subtitulo: 'Entre 20 y 39 participantes en el grupo',
-      puestos: [
-        { lugar: 1, premio: 60000, extra: 'Medallón + Tricota' },
-        { lugar: 2, premio: 50000, extra: 'Medallón' },
-        { lugar: 3, premio: 40000, extra: 'Medallón' },
-        { lugar: 4, premio: 40000, extra: 'Medallón' },
-        { lugar: 5, premio: 40000, extra: 'Medallón' },
-      ],
-    },
-    {
-      id: 'h-19',
-      badge: '-19 inscritos',
-      subtitulo: 'Hasta 19 participantes en el grupo',
-      puestos: [
-        { lugar: 1, premio: 40000, extra: 'Medallón + Tricota' },
-        { lugar: 2, premio: 30000, extra: 'Medallón' },
-        { lugar: 3, premio: 20000, extra: 'Medallón' },
-        { lugar: 4, premio: 20000, extra: 'Medallón' },
-        { lugar: 5, premio: 20000, extra: 'Medallón' },
-      ],
-    },
-  ],
-  mujer: [
-    {
-      id: 'd-10',
-      badge: '+10 inscritas',
-      subtitulo: 'Más de 10 participantes en la categoría',
-      puestos: [
-        { lugar: 1, premio: 50000, extra: 'Medallón + Tricota' },
-        { lugar: 2, premio: 40000, extra: 'Medallón' },
-        { lugar: 3, premio: 30000, extra: 'Medallón' },
-        { lugar: 4, premio: 20000, extra: 'Medallón' },
-        { lugar: 5, premio: 10000, extra: 'Medallón' },
-      ],
-    },
-    {
-      id: 'd-5',
-      badge: '5–10 inscritas',
-      subtitulo: 'Entre 5 y 10 participantes en la categoría',
-      puestos: [
-        { lugar: 1, premio: 40000, extra: 'Medallón + Tricota' },
-        { lugar: 2, premio: 30000, extra: 'Medallón' },
-        { lugar: 3, premio: 20000, extra: 'Medallón' },
-        { lugar: 4, premio: 10000, extra: 'Medallón' },
-        { lugar: 5, premio: 10000, extra: 'Medallón' },
-      ],
-    },
-    {
-      id: 'd-3',
-      badge: '3 o menos',
-      subtitulo: 'Hasta 3 participantes en la categoría',
-      puestos: [
-        { lugar: 1, premio: 20000, extra: 'Medallón' },
-        { lugar: 2, premio: 10000, extra: 'Medallón' },
-        { lugar: 3, premio: 10000, extra: 'Medallón' },
-      ],
-    },
-  ],
-}
+import { tramosPorGenero } from '../config/categorias'
+import { useVisibleInterval } from '../hooks/useVisibleInterval'
 
 function formatCLP(n) {
   return '$' + n.toLocaleString('es-CL')
@@ -98,7 +9,6 @@ function formatCLP(n) {
 export default function PremiosDinero({ genero = '' }) {
   const tramos = genero === 'mujer' ? tramosPorGenero.mujer : tramosPorGenero.hombre
   const [selectedId, setSelectedId] = useState(null)
-  const timerP = useRef(null)
   const touchStartP = useRef(null)
 
   const efectivoId = selectedId && tramos.find(t => t.id === selectedId) ? selectedId : tramos[0].id
@@ -107,7 +17,6 @@ export default function PremiosDinero({ genero = '' }) {
   const esDamas = genero === 'mujer'
 
   const goTo = (idx) => {
-    clearInterval(timerP.current)
     setSelectedId(tramos[idx].id)
   }
 
@@ -115,23 +24,16 @@ export default function PremiosDinero({ genero = '' }) {
     setSelectedId(null)
   }, [genero])
 
-  useEffect(() => {
-    timerP.current = setInterval(() => {
-      setSelectedId(id => {
-        const cur = tramos.findIndex(t => t.id === (id && tramos.find(x => x.id === id) ? id : tramos[0].id))
-        return tramos[(cur + 1) % tramos.length].id
-      })
-    }, 3500)
-    return () => clearInterval(timerP.current)
-  }, [tramos])
+  useVisibleInterval(() => {
+    setSelectedId(id => {
+      const cur = tramos.findIndex(t => t.id === (id && tramos.find(x => x.id === id) ? id : tramos[0].id))
+      return tramos[(cur + 1) % tramos.length].id
+    })
+  }, 3500)
 
   return (
-    <section id="premios-dinero" className="relative py-20 md:py-28 bg-[#0a0a0a] overflow-hidden">
-      <div className="absolute inset-0 opacity-20">
-        <img src={`${import.meta.env.BASE_URL}images/virtual15.webp`} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/60" />
-      </div>
-      <div className="relative z-10 px-6 md:px-12" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
+    <section id="premios-dinero" className="relative py-20 md:py-28 overflow-hidden">
+      <div className="px-6 md:px-12" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
 
         {/* Encabezado */}
         <div className="mb-10">

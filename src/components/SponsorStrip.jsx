@@ -11,7 +11,7 @@ const logos = [
   { nombre: 'ProPaint',          src: `${BASE}sponsors/propaint.jpeg` },
 ]
 
-// Duplicamos para el loop infinito
+// Tripled once for infinite scroll loop
 const items = [...logos, ...logos, ...logos]
 
 export default function SponsorStrip() {

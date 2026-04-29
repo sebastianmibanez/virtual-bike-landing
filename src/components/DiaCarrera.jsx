@@ -1,26 +1,7 @@
 const clasica3 = `${import.meta.env.BASE_URL}images/virtual15.webp`
 import { useState, useEffect, useRef } from 'react'
-
-const horariosPorGenero = {
-  hombre: [
-    { hora: '08:00', label: 'Acreditación', categorias: 'Todas las categorías', destacado: false },
-    { hora: '09:00', label: 'Debutantes', categorias: 'Sin límite de edad', destacado: true },
-    { hora: '09:20', label: 'Master C', categorias: 'Mayores de 50 años', destacado: true },
-    { hora: '11:30', label: 'Competidores', categorias: 'Todo Competidor · Sub/23', destacado: true },
-    { hora: '11:40', label: 'Master A y B', categorias: 'Master A (30-39) · Master B (40-49)', destacado: true },
-  ],
-  mujer: [
-    { hora: '08:00', label: 'Acreditación', categorias: 'Todas las categorías', destacado: false },
-    { hora: '09:20', label: 'Damas', categorias: 'Menor 23 · Mayor 23 · Master mayor 35', destacado: true },
-  ],
-  '': [
-    { hora: '08:00', label: 'Acreditación', categorias: 'Todas las categorías', destacado: false },
-    { hora: '09:00', label: 'Debutantes', categorias: 'Sin límite de edad', destacado: true },
-    { hora: '09:20', label: 'Damas · Master C', categorias: 'Todas las categorías femeninas · Mayores de 50', destacado: true },
-    { hora: '11:30', label: 'Competidores', categorias: 'Todo Competidor · Sub/23', destacado: true },
-    { hora: '11:40', label: 'Master A y B', categorias: 'Master A (30-39) · Master B (40-49)', destacado: true },
-  ],
-}
+import { horariosPorGenero } from '../config/categorias'
+import { useVisibleInterval } from '../hooks/useVisibleInterval'
 
 const datos = [
   {
@@ -79,27 +60,18 @@ const IconMujer = () => (
 export default function DiaCarrera({ genero = '', setGenero }) {
   const horarios = horariosPorGenero[genero] ?? horariosPorGenero['']
   const [activeH, setActiveH] = useState(0)
-  const timerH = useRef(null)
   const touchStartH = useRef(null)
 
   useEffect(() => {
     setActiveH(0)
   }, [genero])
 
-  useEffect(() => {
-    timerH.current = setInterval(() => {
-      setActiveH(i => (i + 1) % horarios.length)
-    }, 3000)
-    return () => clearInterval(timerH.current)
-  }, [horarios.length])
+  useVisibleInterval(() => {
+    setActiveH(i => (i + 1) % horarios.length)
+  }, 3000)
   return (
-    <section id="dia-carrera" className="relative overflow-hidden py-20 md:py-28">
-      <div className="absolute inset-0 opacity-30">
-        <img src={clasica3} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-transparent to-[#080808]/80" />
-      </div>
-
-      <div className="relative z-10 px-6 md:px-12" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
+    <section id="dia-carrera" className="relative py-20 md:py-28">
+      <div className="px-6 md:px-12" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
 
         {/* Encabezado */}
         <div className="mb-14 text-center">
@@ -121,6 +93,7 @@ export default function DiaCarrera({ genero = '', setGenero }) {
             title="Circuito Clásica Virtual 2026"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            loading="lazy"
             className="w-full h-full"
             style={{ border: 'none' }}
           />
@@ -178,7 +151,6 @@ export default function DiaCarrera({ genero = '', setGenero }) {
               if (touchStartH.current === null) return
               const diff = touchStartH.current - e.changedTouches[0].clientX
               if (Math.abs(diff) > 40) {
-                clearInterval(timerH.current)
                 setActiveH(i => diff > 0 ? (i + 1) % horarios.length : (i - 1 + horarios.length) % horarios.length)
               }
               touchStartH.current = null
@@ -199,7 +171,7 @@ export default function DiaCarrera({ genero = '', setGenero }) {
             {/* Dots */}
             <div className="flex justify-center gap-2 mt-4">
               {horarios.map((_, i) => (
-                <button key={i} onClick={() => { clearInterval(timerH.current); setActiveH(i) }}
+                <button key={i} onClick={() => { setActiveH(i) }}
                   className={`w-2 h-2 rounded-full transition-all ${i === activeH ? 'bg-[#f5e400]' : 'bg-white/20'}`} />
               ))}
             </div>
