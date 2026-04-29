@@ -40,7 +40,7 @@ export const tramosPorGenero = {
       badge: '+60 inscritos',
       subtitulo: 'Cuando el grupo supera los 60 participantes',
       puestos: [
-        { lugar: 1, premio: 100000, extra: 'Medallón + Tricota' },
+        { lugar: 1, premio: 100000, extra: 'Medallón + Tricota de Campeón' },
         { lugar: 2, premio: 80000,  extra: 'Medallón' },
         { lugar: 3, premio: 70000,  extra: 'Medallón' },
         { lugar: 4, premio: 60000,  extra: 'Medallón' },
@@ -54,7 +54,7 @@ export const tramosPorGenero = {
       badge: '-59 inscritos',
       subtitulo: 'Entre 40 y 59 participantes en el grupo',
       puestos: [
-        { lugar: 1, premio: 80000, extra: 'Medallón + Tricota' },
+        { lugar: 1, premio: 80000, extra: 'Medallón + Tricota de Campeón' },
         { lugar: 2, premio: 70000, extra: 'Medallón' },
         { lugar: 3, premio: 60000, extra: 'Medallón' },
         { lugar: 4, premio: 50000, extra: 'Medallón' },
@@ -66,7 +66,7 @@ export const tramosPorGenero = {
       badge: '-39 inscritos',
       subtitulo: 'Entre 20 y 39 participantes en el grupo',
       puestos: [
-        { lugar: 1, premio: 60000, extra: 'Medallón + Tricota' },
+        { lugar: 1, premio: 60000, extra: 'Medallón + Tricota de Campeón' },
         { lugar: 2, premio: 50000, extra: 'Medallón' },
         { lugar: 3, premio: 40000, extra: 'Medallón' },
         { lugar: 4, premio: 40000, extra: 'Medallón' },
@@ -78,7 +78,7 @@ export const tramosPorGenero = {
       badge: '-19 inscritos',
       subtitulo: 'Hasta 19 participantes en el grupo',
       puestos: [
-        { lugar: 1, premio: 40000, extra: 'Medallón + Tricota' },
+        { lugar: 1, premio: 40000, extra: 'Medallón + Tricota de Campeón' },
         { lugar: 2, premio: 30000, extra: 'Medallón' },
         { lugar: 3, premio: 20000, extra: 'Medallón' },
         { lugar: 4, premio: 20000, extra: 'Medallón' },
@@ -92,7 +92,7 @@ export const tramosPorGenero = {
       badge: '+10 inscritas',
       subtitulo: 'Más de 10 participantes en la categoría',
       puestos: [
-        { lugar: 1, premio: 50000, extra: 'Medallón + Tricota' },
+        { lugar: 1, premio: 50000, extra: 'Medallón + Tricota de Campeona' },
         { lugar: 2, premio: 40000, extra: 'Medallón' },
         { lugar: 3, premio: 30000, extra: 'Medallón' },
         { lugar: 4, premio: 20000, extra: 'Medallón' },
@@ -104,7 +104,7 @@ export const tramosPorGenero = {
       badge: '5–10 inscritas',
       subtitulo: 'Entre 5 y 10 participantes en la categoría',
       puestos: [
-        { lugar: 1, premio: 40000, extra: 'Medallón + Tricota' },
+        { lugar: 1, premio: 40000, extra: 'Medallón + Tricota de Campeona' },
         { lugar: 2, premio: 30000, extra: 'Medallón' },
         { lugar: 3, premio: 20000, extra: 'Medallón' },
         { lugar: 4, premio: 10000, extra: 'Medallón' },

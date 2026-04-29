@@ -201,7 +201,7 @@ export default function Inscripcion({ genero, setGenero }) {
   }
 
   return (
-    <section id="inscripcion" className="relative w-full">
+    <section id="inscripcion" className="relative w-full pt-24 md:pt-36">
 
       {/* Selector de género — encima del formulario */}
       <div className={`relative z-10 ${paso === 3 ? 'hidden' : ''}`}>

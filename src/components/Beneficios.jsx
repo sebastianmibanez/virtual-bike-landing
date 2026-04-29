@@ -65,9 +65,11 @@ const cards = [
   },
 ]
 
-function FlipCard({ foto, titulo, intro, items }) {
+function FlipCard({ foto, titulo, intro, items, index }) {
   const [flipped, setFlipped] = useState(false)
+  const [inView, setInView] = useState(false)
   const ref = useRef(null)
+  const timerRef = useRef(null)
 
   useEffect(() => {
     const el = ref.current
@@ -75,16 +77,25 @@ function FlipCard({ foto, titulo, intro, items }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setFlipped(true), 200)
+          setInView(true)
         } else {
+          setInView(false)
           setFlipped(false)
+          clearTimeout(timerRef.current)
         }
       },
       { threshold: 0.3 }
     )
     observer.observe(el)
-    return () => observer.disconnect()
+    return () => { observer.disconnect(); clearTimeout(timerRef.current) }
   }, [])
+
+  useEffect(() => {
+    if (!inView) return
+    const delay = 2000 + index * 400
+    timerRef.current = setTimeout(() => setFlipped(true), delay)
+    return () => clearTimeout(timerRef.current)
+  }, [inView, index])
 
   return (
     <div
@@ -178,8 +189,8 @@ export default function Beneficios() {
           Todo lo que <span className="text-[#f5e400]">te llevas</span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
-          {cards.map((c) => (
-            <FlipCard key={c.titulo} {...c} />
+          {cards.map((c, i) => (
+            <FlipCard key={c.titulo} index={i} {...c} />
           ))}
         </div>
       </div>

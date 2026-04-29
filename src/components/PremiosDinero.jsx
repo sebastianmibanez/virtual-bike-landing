@@ -32,7 +32,7 @@ export default function PremiosDinero({ genero = '' }) {
   }, 3500)
 
   return (
-    <section id="premios-dinero" className="relative py-20 md:py-28 overflow-hidden">
+    <section id="premios-dinero" className="relative pt-36 md:pt-48 pb-24 md:pb-36 overflow-hidden">
       <div className="px-6 md:px-12" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
 
         {/* Encabezado */}
@@ -66,14 +66,14 @@ export default function PremiosDinero({ genero = '' }) {
             {tramos.map((t, i) => (
               <button key={t.id} onClick={() => goTo(i)}
                 className={`p-4 flex items-center justify-center text-center min-h-[52px] transition-all ${efectivoId === t.id ? 'bg-[#f5e400] text-black' : 'bg-[#0a0a0a] text-white/50 hover:text-white hover:bg-white/5'}`}>
-                <span className="text-base uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}>{t.badge}</span>
+                <span className="text-sm uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}>{t.subtitulo}</span>
               </button>
             ))}
           </div>
           {/* Mobile: badge visible + dots */}
           <div className="md:hidden">
             <div className="bg-white/5 px-6 py-4 mb-4 text-center">
-              <span className="text-[#f5e400] text-2xl uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>{tramo.badge}</span>
+              <span className="text-[#f5e400] text-lg uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>{tramo.subtitulo}</span>
             </div>
             <div className="flex justify-center gap-2">
               {tramos.map((_, i) => (
@@ -82,13 +82,6 @@ export default function PremiosDinero({ genero = '' }) {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Encabezado del tramo */}
-        <div className="mb-6">
-          <h3 className="text-xl md:text-2xl text-white uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
-            {tramo.subtitulo}
-          </h3>
         </div>
 
         {/* Podio completo */}
@@ -105,16 +98,17 @@ export default function PremiosDinero({ genero = '' }) {
                 >
                   {p.lugar}°
                 </div>
-                <div className="min-w-0">
-                  <div
-                    className={`text-xl md:text-2xl uppercase leading-none ${p.lugar === 1 ? 'text-black' : 'text-white'}`}
+                <div className="flex items-baseline gap-3 min-w-0">
+                  <span
+                    className={`text-xl md:text-2xl uppercase leading-none flex-shrink-0 ${p.lugar === 1 ? 'text-black' : 'text-white'}`}
                     style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}
                   >
                     {formatCLP(p.premio)}
-                  </div>
-                  <div className={`text-[11px] md:text-xs mt-1 ${p.lugar === 1 ? 'text-black/70' : 'text-white/50'}`}>
+                  </span>
+                  <span className={`text-sm md:text-base ${p.lugar === 1 ? 'text-black/50' : 'text-white/30'}`}>+</span>
+                  <span className={`text-sm md:text-base uppercase ${p.lugar === 1 ? 'text-black/80' : 'text-white/60'}`} style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
                     {p.extra}
-                  </div>
+                  </span>
                 </div>
               </div>
               {p.lugar === 1 && (

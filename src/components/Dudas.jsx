@@ -6,30 +6,21 @@ const IconWA = () => (
 
 export default function Dudas() {
   return (
-    <section className="py-20 border-t border-b border-white/5">
-      <div className="px-6 flex flex-row items-center justify-center gap-5" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
-        <span className="text-white/60 text-2xl uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700, letterSpacing: '0.1em' }}>
-          Dudas al
-        </span>
-        <a
-          href="https://wa.me/56999542821"
-          aria-label="Contactar por WhatsApp"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-3 bg-[#25D366]/10 border border-[#25D366]/40 px-8 py-4 rounded-full hover:bg-[#25D366]/20 transition-all"
-        >
-          <div style={{ animation: 'waPulse 1.8s ease-in-out infinite' }} className="text-[#25D366]">
-            <IconWA />
-          </div>
-          <span className="text-white text-2xl uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>WhatsApp</span>
-        </a>
-      </div>
+    <a
+      href="https://wa.me/56999542821"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Contactar por WhatsApp"
+      className="fixed bottom-6 right-6 z-50 md:bottom-8 md:right-8 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform"
+      style={{ animation: 'waPulse 2s ease-in-out infinite' }}
+    >
+      <IconWA />
       <style>{`
         @keyframes waPulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.2); }
+          0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.4); }
+          50% { box-shadow: 0 0 0 12px rgba(37,211,102,0); }
         }
       `}</style>
-    </section>
+    </a>
   )
 }
