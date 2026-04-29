@@ -28,7 +28,8 @@ virtual-bike-landing/
 │       ├── Beneficios.jsx     ← Lista de beneficios
 │       └── PremiosDinero.jsx  ← Escalado de premios
 ├── public/
-│   └── sponsors/              ← Logos sponsors (jpg/jpeg)
+│   ├── sponsors/              ← Logos sponsors (jpg/jpeg)
+│   └── images/                ← Fotos pesadas servidas directo desde el servidor (virtual13-16.webp)
 └── dist/                      ← Build de producción (esto se sube al servidor)
 ```
 
