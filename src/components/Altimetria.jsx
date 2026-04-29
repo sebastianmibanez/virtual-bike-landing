@@ -31,7 +31,9 @@ const typeColors = {
 
 export default function Altimetria() {
   const [hoverIdx, setHoverIdx] = useState(null)
+  const [fullscreen, setFullscreen] = useState(false)
   const svgRef = useRef(null)
+  const fsSvgRef = useRef(null)
 
   const grades = useMemo(() => {
     const g = [0]
@@ -44,13 +46,15 @@ export default function Altimetria() {
   }, [])
 
   const W = 1000
-  const H = 240
-  const padTop = 42
+  const padL = 20
+  const padR = 20
+  const H = 260
+  const padTop = 55
   const padBot = 30
   const chartH = H - padTop - padBot
   const eleRange = maxEle - minEle || 1
 
-  const toX = (km) => (km / totalKm) * W
+  const toX = (km) => padL + (km / totalKm) * (W - padL - padR)
   const toY = (ele) => padTop + chartH - ((ele - minEle) / eleRange) * chartH
 
   const pathD = points.map((p, i) =>
@@ -59,8 +63,8 @@ export default function Altimetria() {
 
   const areaD = pathD + ` L${toX(points[points.length - 1][0]).toFixed(1)},${H - padBot} L0,${H - padBot} Z`
 
-  const handleMove = (e) => {
-    const svg = svgRef.current
+  const handleMove = (e, ref) => {
+    const svg = ref?.current || svgRef.current
     if (!svg) return
     const rect = svg.getBoundingClientRect()
     const x = ((e.clientX - rect.left) / rect.width) * totalKm
@@ -93,17 +97,101 @@ export default function Altimetria() {
   const hp = hoverIdx !== null ? points[hoverIdx] : null
   const hg = hoverIdx !== null ? grades[hoverIdx] : 0
 
+  const handleTouch = (e, ref) => {
+    const svg = ref?.current || svgRef.current
+    if (!svg) return
+    const rect = svg.getBoundingClientRect()
+    const touch = e.touches[0]
+    const x = ((touch.clientX - rect.left) / rect.width) * totalKm
+    let closestIdx = 0
+    let minD = Infinity
+    for (let i = 0; i < points.length; i++) {
+      const d = Math.abs(points[i][0] - x)
+      if (d < minD) { minD = d; closestIdx = i }
+    }
+    setHoverIdx(closestIdx)
+  }
+
+  const legend = [
+    { color: '#4ade80', label: 'Salida/Meta' },
+    { color: '#60a5fa', label: 'Giro Ruta 68' },
+    { color: '#c084fc', label: 'Lo Echevers' },
+    { color: '#f97316', label: 'Meta volante' },
+    { color: '#ef4444', label: 'Recta final' },
+  ]
+
+  const renderChart = (ref, gradId) => (
+    <svg
+      ref={ref}
+      viewBox={`0 0 ${W} ${H}`}
+      className="w-full h-full"
+      style={{ cursor: 'crosshair' }}
+      onMouseMove={(e) => handleMove(e, ref)}
+      onTouchMove={(e) => { e.preventDefault(); handleTouch(e, ref) }}
+      onMouseLeave={() => setHoverIdx(null)}
+      onTouchEnd={() => setHoverIdx(null)}
+    >
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#f5e400" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#f5e400" stopOpacity="0.02" />
+        </linearGradient>
+      </defs>
+
+      {gridLines.map(e => (
+        <g key={e}>
+          <line x1="0" y1={toY(e)} x2={W} y2={toY(e)} stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />
+          <text x="4" y={toY(e) - 3} fill="rgba(255,255,255,0.2)" fontSize="10" fontFamily="Barlow Condensed">{e}m</text>
+        </g>
+      ))}
+
+      {[0, Math.round(totalKm / 4), Math.round(totalKm / 2), Math.round(totalKm * 3 / 4), Math.round(totalKm)].map(km => (
+        <text key={km} x={toX(km)} y={H - 6} fill="rgba(255,255,255,0.25)" fontSize="10" fontFamily="Barlow Condensed" textAnchor="middle">
+          {km} km
+        </text>
+      ))}
+
+      <path d={areaD} fill={`url(#${gradId})`} />
+      <path d={pathD} fill="none" stroke="#f5e400" strokeWidth="1.5" />
+
+      {markers.map((m, i) => {
+        const x = toX(m.km)
+        const y = toY(markerEles[i])
+        const color = typeColors[m.type]
+        const isMain = m.type === 'start' || m.type === 'final'
+        const isLower = m.type === 'mv' || m.type === 'final'
+        const labelY = isLower ? padTop - 2 : padTop - 16
+        const anchor = m.km < 3 ? 'start' : m.km > totalKm - 3 ? 'end' : 'middle'
+        return (
+          <g key={`${m.km}-${m.label}`}>
+            <line x1={x} y1={y} x2={x} y2={labelY + 4} stroke={color} strokeWidth="0.5" strokeDasharray="2,2" opacity="0.5" />
+            <circle cx={x} cy={y} r={isMain ? 4 : 3} fill={color} />
+            <text x={x} y={labelY} fill={color} fontSize={isMain ? '10' : '8.5'} fontFamily="Barlow Condensed" fontWeight={isMain ? '800' : '600'} textAnchor={anchor} style={{ textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+              {m.label}
+            </text>
+          </g>
+        )
+      })}
+
+      {hp && (
+        <>
+          <line x1={toX(hp[0])} y1={padTop} x2={toX(hp[0])} y2={H - padBot} stroke="#f5e400" strokeWidth="0.5" strokeDasharray="3,3" />
+          <circle cx={toX(hp[0])} cy={toY(hp[1])} r="4" fill="#f5e400" />
+          <rect x={Math.min(Math.max(toX(hp[0]) - 55, 0), W - 110)} y={Math.max(toY(hp[1]) - 28, padTop)} width="110" height="20" rx="3" fill="rgba(0,0,0,0.9)" />
+          <text x={Math.min(Math.max(toX(hp[0]), 55), W - 55)} y={Math.max(toY(hp[1]) - 14, padTop + 15)} fill="#e6c200" fontSize="11" fontFamily="Barlow Condensed" fontWeight="700" textAnchor="middle">
+            {hg > 0 ? '+' : ''}{hg.toFixed(1)}% · {hp[0]}km · {hp[1]}m
+          </text>
+        </>
+      )}
+    </svg>
+  )
+
   return (
+    <>
     <div className="rounded-xl overflow-hidden" style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.05)' }}>
       {/* Legend */}
       <div className="flex items-center gap-4 px-4 md:px-6 py-2 border-b border-white/5">
-        {[
-          { color: '#4ade80', label: 'Salida/Meta' },
-          { color: '#60a5fa', label: 'Giro Ruta 68' },
-          { color: '#c084fc', label: 'Lo Echevers' },
-          { color: '#f97316', label: 'Meta volante' },
-          { color: '#ef4444', label: 'Recta final' },
-        ].map(l => (
+        {legend.map(l => (
           <div key={l.label} className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: l.color }} />
             <span className="text-white/40 text-[9px] uppercase tracking-wider" style={{ fontFamily: 'Barlow Condensed' }}>{l.label}</span>
@@ -111,76 +199,54 @@ export default function Altimetria() {
         ))}
       </div>
 
-      <div className="px-2 md:px-4 py-4">
-        <svg
-          ref={svgRef}
-          viewBox={`0 0 ${W} ${H}`}
-          className="w-full"
-          style={{ height: 'auto', maxHeight: '240px', cursor: 'crosshair' }}
-          onMouseMove={handleMove}
-          onMouseLeave={() => setHoverIdx(null)}
+      <div className="px-2 md:px-4 py-4 relative">
+        <div style={{ maxHeight: '240px' }}>
+          {renderChart(svgRef, 'eleGrad')}
+        </div>
+        {/* Fullscreen button - mobile only */}
+        <button
+          onClick={() => setFullscreen(true)}
+          className="md:hidden absolute bottom-6 right-4 bg-white/10 hover:bg-white/20 text-white/60 rounded-lg p-2 backdrop-blur-sm transition-all"
+          aria-label="Ver altimetría en pantalla completa"
         >
-          <defs>
-            <linearGradient id="eleGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f5e400" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#f5e400" stopOpacity="0.02" />
-            </linearGradient>
-          </defs>
-
-          {gridLines.map(e => (
-            <g key={e}>
-              <line x1="0" y1={toY(e)} x2={W} y2={toY(e)} stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />
-              <text x="4" y={toY(e) - 3} fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="Barlow Condensed">{e}m</text>
-            </g>
-          ))}
-
-          {[0, Math.round(totalKm / 4), Math.round(totalKm / 2), Math.round(totalKm * 3 / 4), Math.round(totalKm)].map(km => (
-            <text key={km} x={toX(km)} y={H - 8} fill="rgba(255,255,255,0.25)" fontSize="9" fontFamily="Barlow Condensed" textAnchor="middle">
-              {km} km
-            </text>
-          ))}
-
-          <path d={areaD} fill="url(#eleGrad)" />
-          <path d={pathD} fill="none" stroke="#f5e400" strokeWidth="1.5" />
-
-          {/* Reference markers */}
-          {markers.map((m, i) => {
-            const x = toX(m.km)
-            const y = toY(markerEles[i])
-            const color = typeColors[m.type]
-            const isMain = m.type === 'start' || m.type === 'final'
-            return (
-              <g key={`${m.km}-${m.label}`}>
-                <line x1={x} y1={y} x2={x} y2={padTop - 4} stroke={color} strokeWidth="0.5" strokeDasharray="2,2" opacity="0.5" />
-                <circle cx={x} cy={y} r={isMain ? 3.5 : 2.5} fill={color} />
-                <text
-                  x={x}
-                  y={padTop - 8}
-                  fill={color}
-                  fontSize={isMain ? '8.5' : '7'}
-                  fontFamily="Barlow Condensed"
-                  fontWeight={isMain ? '800' : '600'}
-                  textAnchor="middle"
-                  style={{ textTransform: 'uppercase', letterSpacing: '0.02em' }}
-                >
-                  {m.label}
-                </text>
-              </g>
-            )
-          })}
-
-          {hp && (
-            <>
-              <line x1={toX(hp[0])} y1={padTop} x2={toX(hp[0])} y2={H - padBot} stroke="#f5e400" strokeWidth="0.5" strokeDasharray="3,3" />
-              <circle cx={toX(hp[0])} cy={toY(hp[1])} r="4" fill="#f5e400" />
-              <rect x={Math.min(Math.max(toX(hp[0]) - 55, 0), W - 110)} y={Math.max(toY(hp[1]) - 28, padTop)} width="110" height="20" rx="3" fill="rgba(0,0,0,0.9)" />
-              <text x={Math.min(Math.max(toX(hp[0]), 55), W - 55)} y={Math.max(toY(hp[1]) - 14, padTop + 15)} fill="#f5e400" fontSize="10" fontFamily="Barlow Condensed" fontWeight="700" textAnchor="middle">
-                {hg > 0 ? '+' : ''}{hg.toFixed(1)}% · {hp[0]}km · {hp[1]}m
-              </text>
-            </>
-          )}
-        </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+          </svg>
+        </button>
       </div>
     </div>
+
+    {/* Fullscreen landscape modal */}
+    {fullscreen && (
+      <div
+        className="fixed inset-0 z-[9999] flex flex-col"
+        style={{ background: '#0a0a0a' }}
+        onClick={(e) => { if (e.target === e.currentTarget) setFullscreen(false) }}
+      >
+        <div className="flex items-center justify-between px-4 py-3 flex-shrink-0">
+          <div className="flex items-center gap-3 flex-wrap">
+            {legend.map(l => (
+              <div key={l.label} className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: l.color }} />
+                <span className="text-white/40 text-[9px] uppercase tracking-wider" style={{ fontFamily: 'Barlow Condensed' }}>{l.label}</span>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setFullscreen(false)}
+            className="bg-white/10 hover:bg-white/20 text-white rounded-full p-3 ml-4 flex-shrink-0"
+            aria-label="Cerrar"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-7 h-7">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="flex-1 px-4 pb-4 min-h-0">
+          {renderChart(fsSvgRef, 'eleGradFs')}
+        </div>
+      </div>
+    )}
+    </>
   )
 }

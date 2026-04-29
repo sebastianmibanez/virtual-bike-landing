@@ -63,7 +63,7 @@ export default function Patrocinadores() {
   return (
     <section id="auspiciadores" className="py-20 px-6 md:px-12 border-t border-white/5 bg-[#080808]">
       <div style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
-        <p className="text-center text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+        <p className="text-center text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
           Auspiciadores & Colaboradores
         </p>
         <h2 className="text-center text-3xl md:text-4xl text-white uppercase mb-12" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>

@@ -121,31 +121,10 @@ export default function DiaCarrera({ genero = '', setGenero }) {
 
         {/* Tabla horarios */}
         <div className="mb-12">
-          <div className="flex items-center justify-between mb-8 gap-4">
+          <div className="mb-8">
             <h3 className="text-2xl md:text-3xl text-white uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
-              Horarios <span className="text-[#f5e400]">por categoría</span>
+              Horarios <span className="text-[#e6c200]">por categoría</span>
             </h3>
-            <div className="flex gap-px flex-shrink-0">
-              {[
-                { val: 'hombre', label: 'H', Icon: IconHombre },
-                { val: 'mujer',  label: 'M', Icon: IconMujer  },
-              ].map(({ val, label, Icon }) => (
-                <button
-                  key={val}
-                  type="button"
-                  onClick={() => setGenero?.(val)}
-                  title={val.charAt(0).toUpperCase() + val.slice(1)}
-                  className={`flex items-center gap-1.5 px-3 py-2 transition-all text-xs uppercase ${
-                    genero === val
-                      ? 'bg-[#f5e400] text-black'
-                      : 'bg-white/5 text-white/50 hover:text-white hover:bg-white/10'
-                  }`}
-                  style={{ fontFamily: 'Barlow Condensed', fontWeight: 800, letterSpacing: '0.08em' }}
-                >
-                  <Icon />{label}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Carousel mobile / lista desktop */}

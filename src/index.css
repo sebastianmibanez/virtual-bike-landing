@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --accent: #f5e400;
+  --accent: #e6c200;
   --bg-dark: #080808;
   --bg-card: #0a0a0a;
   --font-condensed: 'Barlow Condensed', sans-serif;
@@ -42,7 +42,7 @@ html {
 }
 
 /* Textura tricota — patrón diagonal sutil sobre amarillo */
-.bg-\[\#f5e400\] {
+.bg-\[\#e6c200\] {
   background-color: var(--accent);
   background-image:
     repeating-linear-gradient(

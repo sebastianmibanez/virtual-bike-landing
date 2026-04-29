@@ -28,7 +28,7 @@ export default function Footer() {
               href="https://www.instagram.com/virtual_bike_cl"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/50 hover:text-[#f5e400] transition-colors text-sm uppercase tracking-widest"
+              className="text-white/50 hover:text-[#e6c200] transition-colors text-sm uppercase tracking-widest"
               style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}
             >
               Instagram
@@ -37,7 +37,7 @@ export default function Footer() {
               href="https://wa.me/56999542821"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/50 hover:text-[#f5e400] transition-colors text-sm uppercase tracking-widest"
+              className="text-white/50 hover:text-[#e6c200] transition-colors text-sm uppercase tracking-widest"
               style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}
             >
               WhatsApp
@@ -46,7 +46,7 @@ export default function Footer() {
               href="https://virtual-bike.cl"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/50 hover:text-[#f5e400] transition-colors text-sm uppercase tracking-widest"
+              className="text-white/50 hover:text-[#e6c200] transition-colors text-sm uppercase tracking-widest"
               style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}
             >
               Sitio web
