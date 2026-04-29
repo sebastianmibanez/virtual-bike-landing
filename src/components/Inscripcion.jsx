@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
+import { EVENT, APERTURA } from '../config/event'
+import { categoriasPorGenero } from '../config/categorias'
+import { validarRut, formatRut } from '../utils/rut'
+import Field from './Field'
 const eventoImg = `${import.meta.env.BASE_URL}images/virtual15.webp`
 
-const API_BASE = 'https://virtual-bike.cl/wp-json/cvbk/v1'
+const API_BASE = EVENT.apiBase
 
 function getSessionId() {
   let sid = sessionStorage.getItem('cvbk_sid')
@@ -26,23 +30,8 @@ function track(tipo) {
 
 // — Control de inscripciones —
 const MODO_PRUEBA = new URLSearchParams(window.location.search).get('test') === 'cvbk26'
-const APERTURA = new Date('2026-05-01T00:00:00-04:00')
 const INSCRIPCIONES_ABIERTAS = MODO_PRUEBA || new Date() >= APERTURA
 const PAGO_HABILITADO = INSCRIPCIONES_ABIERTAS
-
-const categoriasPorGenero = {
-  hombre: [
-    'Debutantes sin edad',
-    'Menor 23 años',
-    'Mayor 24 años',
-    'Mayor 35 años Master',
-    'Todo competidor y Sub/23',
-    'Master A 30/39 años',
-    'Master B 40/49 años',
-    'Master C mayor 50 y más años',
-  ],
-  mujer: ['Menor 23 años', 'Mayor 23 años', 'Master mayor 35 años'],
-}
 
 export const beneficios = [
   {
@@ -71,44 +60,11 @@ export const beneficios = [
   },
 ]
 
-function validarRut(rut) {
-  const clean = rut.replace(/[^0-9kK]/g, '').toUpperCase()
-  if (clean.length < 2) return false
-  const body = clean.slice(0, -1)
-  const dv   = clean.slice(-1)
-  let sum = 0, mul = 2
-  for (let i = body.length - 1; i >= 0; i--) {
-    sum += parseInt(body[i]) * mul
-    mul = mul === 7 ? 2 : mul + 1
-  }
-  const expected = 11 - (sum % 11)
-  const dvCalc = expected === 11 ? '0' : expected === 10 ? 'K' : String(expected)
-  return dv === dvCalc
-}
-
 const initialForm = {
   nombre: '', apellido: '', email: '', telefono: '',
   rut: '', genero: '', categoria: '', club: '', dorsal: '',
   _hp: '', // honeypot — debe quedar vacío
   _t: Date.now(), // timestamp de carga
-}
-
-function Field({ label, name, type = 'text', placeholder, value, onChange, required, accentColor }) {
-  const borderColor = accentColor || 'rgba(255,255,255,0.3)'
-  const focusClass = accentColor ? '' : 'focus:border-[#f5e400]'
-  return (
-    <div className="pt-2">
-      <label className="block text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700, letterSpacing: '0.15em' }}>
-        {label} {required && <span className="text-[#f5e400]">*</span>}
-      </label>
-      <input
-        type={type} name={name} value={value} onChange={onChange}
-        placeholder={placeholder} required={required}
-        className={`w-full border-b text-white px-0 py-4 focus:outline-none transition-all placeholder-white/30 text-base bg-transparent ${focusClass}`}
-        style={{ borderColor }}
-      />
-    </div>
-  )
 }
 
 const IconHombre = () => (
@@ -185,12 +141,7 @@ export default function Inscripcion({ genero, setGenero }) {
     if (!trackedFormStart.current) { trackedFormStart.current = true; track('formulario_inicio') }
     const { name, value } = e.target
     if (name === 'rut') {
-      // Formatear RUT: solo dígitos+k, agregar guión antes del dígito verificador
-      const clean = value.replace(/[^0-9kK]/g, '').toUpperCase()
-      const formatted = clean.length > 1
-        ? clean.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '-' + clean.slice(-1)
-        : clean
-      setForm({ ...form, rut: formatted })
+      setForm({ ...form, rut: formatRut(value) })
       return
     }
     setForm({ ...form, [name]: value })
@@ -250,11 +201,7 @@ export default function Inscripcion({ genero, setGenero }) {
   }
 
   return (
-    <section id="inscripcion" className="relative overflow-hidden w-full">
-      <div className="absolute inset-0">
-        <img src={eventoImg} alt="" className="w-full h-full object-cover object-center opacity-30" />
-        <div className="absolute inset-0 bg-black/70" />
-      </div>
+    <section id="inscripcion" className="relative w-full">
 
       {/* Selector de género — encima del formulario */}
       <div className={`relative z-10 ${paso === 3 ? 'hidden' : ''}`}>
@@ -425,8 +372,6 @@ export default function Inscripcion({ genero, setGenero }) {
             {errorMsg && (
               <div className="border border-red-500/30 bg-red-500/5 text-red-400 text-sm px-4 py-3 mb-4">{errorMsg}</div>
             )}
-
-            {errorMsg && <div className="border border-red-500/30 bg-red-500/5 text-red-400 text-sm px-4 py-3 mt-4">{errorMsg}</div>}
           </div>
         )}
 

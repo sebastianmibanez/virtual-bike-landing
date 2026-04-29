@@ -22,6 +22,7 @@ export default function StickyCTA() {
     >
       <a
         href="#inscripcion"
+        aria-label="Inscríbete por $40.000"
         className="flex items-center justify-between gap-3 bg-[#f5e400] text-black px-5 py-3.5 w-full"
         style={{ fontFamily: 'Barlow Condensed', fontWeight: 900, letterSpacing: '0.05em' }}
       >

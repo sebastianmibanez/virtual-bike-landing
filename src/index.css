@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+:root {
+  --accent: #f5e400;
+  --bg-dark: #080808;
+  --bg-card: #0a0a0a;
+  --font-condensed: 'Barlow Condensed', sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -7,7 +14,7 @@
 }
 
 body {
-  background: #080808;
+  background: var(--bg-dark);
   color: #ffffff;
   font-family: 'Barlow', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -18,16 +25,25 @@ body {
 }
 
 .font-condensed {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: var(--font-condensed);
 }
 
 html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Textura tricota — patrón diagonal sutil sobre amarillo */
 .bg-\[\#f5e400\] {
-  background-color: #f5e400;
+  background-color: var(--accent);
   background-image:
     repeating-linear-gradient(
       45deg,

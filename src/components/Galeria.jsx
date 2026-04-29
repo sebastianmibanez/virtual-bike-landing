@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
+import { useVisibleInterval } from '../hooks/useVisibleInterval'
 import clasica1 from '../assets/clasica1.jpg'
 import clasica2 from '../assets/clasica2.jpg'
 import clasica3 from '../assets/clasica3.jpg'
@@ -24,11 +25,7 @@ export default function Galeria() {
   const next = useCallback(() => setCurrent(c => (c + 1) % imagenes.length), [])
   const prev = () => setCurrent(c => (c - 1 + imagenes.length) % imagenes.length)
 
-  useEffect(() => {
-    if (paused) return
-    const timer = setInterval(next, 4500)
-    return () => clearInterval(timer)
-  }, [next, paused])
+  useVisibleInterval(next, paused ? null : 4500)
 
   return (
     <section id="galeria" className="py-28 px-4 bg-[#0a0a0a]">
@@ -69,12 +66,14 @@ export default function Galeria() {
             {/* Controles */}
             <button
               onClick={prev}
+              aria-label="Foto anterior"
               className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#f5e400] text-white hover:text-black w-12 h-12 flex items-center justify-center transition-all text-2xl font-bold backdrop-blur-sm"
             >
               ‹
             </button>
             <button
               onClick={next}
+              aria-label="Siguiente foto"
               className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#f5e400] text-white hover:text-black w-12 h-12 flex items-center justify-center transition-all text-2xl font-bold backdrop-blur-sm"
             >
               ›

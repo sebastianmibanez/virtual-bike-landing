@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useVisibleInterval } from '../hooks/useVisibleInterval'
+import { EVENT_DATE } from '../config/event'
 import virtual9 from '../assets/virtual9_c.jpg'
 import virtual7 from '../assets/virtual7_c.jpg'
 import virtual11 from '../assets/virtual11_c.jpg'
@@ -12,8 +14,6 @@ const SLIDES = [
   { img: virtual9,  label: 'Clásica VBK · 21 de Mayo' },
   { img: virtual7,  label: 'Clásica VBK · 21 de Mayo' },
 ]
-
-const EVENT_DATE = new Date('2026-05-21T08:00:00')
 
 function getTimeLeft(target) {
   const diff = target - new Date()
@@ -37,14 +37,14 @@ function useCountdown(target) {
 
 function CountBox({ value, label }) {
   return (
-    <div className="flex flex-col items-center min-w-[52px]">
+    <div className="flex flex-col items-center min-w-[36px]">
       <span
-        className="text-2xl md:text-4xl text-white tabular-nums leading-none"
+        className="text-lg md:text-2xl text-white tabular-nums leading-none"
         style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}
       >
         {String(value).padStart(2, '0')}
       </span>
-      <span className="text-[9px] uppercase tracking-[0.2em] text-white/40 mt-1">{label}</span>
+      <span className="text-[8px] uppercase tracking-[0.15em] text-white/40 mt-0.5">{label}</span>
     </div>
   )
 }
@@ -64,10 +64,7 @@ export default function Hero() {
   const next = useCallback(() => goTo((current + 1) % SLIDES.length), [current, goTo])
   const prev = useCallback(() => goTo((current - 1 + SLIDES.length) % SLIDES.length), [current, goTo])
 
-  useEffect(() => {
-    const t = setInterval(next, 3000)
-    return () => clearInterval(t)
-  }, [next])
+  useVisibleInterval(next, 3000)
 
   return (
     <section className="relative w-full h-[60vw] min-h-[480px] md:h-screen overflow-hidden bg-black">
@@ -77,41 +74,41 @@ export default function Hero() {
           key={i}
           className={`absolute inset-0 transition-opacity duration-700 ${i === current ? 'opacity-100' : 'opacity-0'}`}
         >
-          <img src={s.img} alt="" className="w-full h-full object-cover object-center" />
+          <img src={s.img} alt="" className="w-full h-full object-cover object-center" fetchPriority={i === 0 ? 'high' : 'low'} />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
         </div>
       ))}
 
-      {/* Bloque de texto con posición propia */}
-      <div className="absolute left-10 md:left-16 bottom-8 md:bottom-28 z-10 max-w-lg">
+      {/* Bloque de texto — compacto, pegado abajo-izquierda */}
+      <div className="absolute left-4 md:left-10 bottom-4 md:bottom-10 z-10">
         <span
-          className="text-white/55 text-xs uppercase tracking-[0.25em] mb-4 font-semibold block"
+          className="text-white/50 text-[10px] uppercase tracking-[0.2em] mb-1 font-semibold block"
           style={{ fontFamily: 'Barlow Condensed' }}
         >
           🚴 Virtual-Bike.cl · Edición 2026
         </span>
         <h1
-          className="text-3xl md:text-7xl text-white uppercase leading-tight mb-1 drop-shadow-xl"
+          className="text-xl md:text-4xl text-white uppercase leading-none mb-1 drop-shadow-xl whitespace-nowrap"
           style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}
         >
           Clásica <span style={{ color: '#f5e400' }}>Virtual Bike 2026</span>
         </h1>
-        <p className="text-white/65 text-xs md:text-base leading-relaxed mb-3">
+        <p className="text-white/60 text-[10px] md:text-xs leading-relaxed mb-2">
           21 de Mayo · La carrera que todos esperan
         </p>
-        <div className="flex items-end gap-2 mb-4">
+        <div className="flex items-end gap-1.5 mb-2">
           <CountBox value={days} label="Días" />
-          <span className="text-[#f5e400]/50 text-base pb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
+          <span className="text-[#f5e400]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
           <CountBox value={hours} label="Horas" />
-          <span className="text-[#f5e400]/50 text-base pb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
+          <span className="text-[#f5e400]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
           <CountBox value={minutes} label="Min" />
-          <span className="text-[#f5e400]/50 text-base pb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
+          <span className="text-[#f5e400]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
           <CountBox value={seconds} label="Seg" />
         </div>
         <a
           href="#inscripcion"
-          className="inline-block bg-[#f5e400] text-black px-8 py-3.5 text-sm uppercase hover:bg-white transition-all duration-200 hover:scale-105 shadow-xl shadow-[#f5e400]/20"
+          className="inline-block bg-[#f5e400] text-black px-5 py-2 text-xs uppercase hover:bg-white transition-all duration-200 hover:scale-105 shadow-xl shadow-[#f5e400]/20"
           style={{ fontFamily: 'Barlow Condensed', fontWeight: 800, letterSpacing: '0.08em' }}
         >
           Inscríbete aquí →
@@ -121,12 +118,14 @@ export default function Hero() {
       {/* Flechas circulares */}
       <button
         onClick={prev}
+        aria-label="Slide anterior"
         className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 hover:border-white/60 bg-black/30 hover:bg-black/60 flex items-center justify-center text-white text-xl transition-all backdrop-blur-sm"
       >
         ‹
       </button>
       <button
         onClick={next}
+        aria-label="Siguiente slide"
         className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 hover:border-white/60 bg-black/30 hover:bg-black/60 flex items-center justify-center text-white text-xl transition-all backdrop-blur-sm"
       >
         ›
