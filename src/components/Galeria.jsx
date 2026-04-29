@@ -32,7 +32,7 @@ export default function Galeria() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-12">
           <p
-            className="text-[#e6c200] text-sm uppercase tracking-[0.3em] mb-3"
+            className="text-[#f5e400] text-sm uppercase tracking-[0.3em] mb-3"
             style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}
           >
             Ediciones anteriores
@@ -56,7 +56,7 @@ export default function Galeria() {
                 key={i}
                 src={img.src}
                 alt={img.alt}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 animate-slow-zoom ${
                   i === current ? 'opacity-100' : 'opacity-0'
                 }`}
               />
@@ -67,14 +67,14 @@ export default function Galeria() {
             <button
               onClick={prev}
               aria-label="Foto anterior"
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#e6c200] text-white hover:text-black w-12 h-12 flex items-center justify-center transition-all text-2xl font-bold backdrop-blur-sm"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#f5e400] text-white hover:text-black w-12 h-12 flex items-center justify-center transition-all text-2xl font-bold backdrop-blur-sm"
             >
               ‹
             </button>
             <button
               onClick={next}
               aria-label="Siguiente foto"
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#e6c200] text-white hover:text-black w-12 h-12 flex items-center justify-center transition-all text-2xl font-bold backdrop-blur-sm"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#f5e400] text-white hover:text-black w-12 h-12 flex items-center justify-center transition-all text-2xl font-bold backdrop-blur-sm"
             >
               ›
             </button>
@@ -93,7 +93,7 @@ export default function Galeria() {
                 key={i}
                 onClick={() => setCurrent(i)}
                 className={`relative overflow-hidden aspect-square transition-all duration-200 ${
-                  i === current ? 'ring-2 ring-[#e6c200]' : 'opacity-50 hover:opacity-80'
+                  i === current ? 'ring-2 ring-[#f5e400]' : 'opacity-50 hover:opacity-80'
                 }`}
               >
                 <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />

@@ -125,9 +125,10 @@ export default function Altimetria() {
       ref={ref}
       viewBox={`0 0 ${W} ${H}`}
       className="w-full h-full"
-      style={{ cursor: 'crosshair' }}
+      style={{ cursor: 'crosshair', touchAction: 'none' }}
       onMouseMove={(e) => handleMove(e, ref)}
       onTouchMove={(e) => { e.preventDefault(); handleTouch(e, ref) }}
+      onTouchStart={(e) => { e.preventDefault(); handleTouch(e, ref) }}
       onMouseLeave={() => setHoverIdx(null)}
       onTouchEnd={() => setHoverIdx(null)}
     >
@@ -176,9 +177,9 @@ export default function Altimetria() {
       {hp && (
         <>
           <line x1={toX(hp[0])} y1={padTop} x2={toX(hp[0])} y2={H - padBot} stroke="#f5e400" strokeWidth="0.5" strokeDasharray="3,3" />
-          <circle cx={toX(hp[0])} cy={toY(hp[1])} r="4" fill="#f5e400" />
-          <rect x={Math.min(Math.max(toX(hp[0]) - 55, 0), W - 110)} y={Math.max(toY(hp[1]) - 28, padTop)} width="110" height="20" rx="3" fill="rgba(0,0,0,0.9)" />
-          <text x={Math.min(Math.max(toX(hp[0]), 55), W - 55)} y={Math.max(toY(hp[1]) - 14, padTop + 15)} fill="#e6c200" fontSize="11" fontFamily="Barlow Condensed" fontWeight="700" textAnchor="middle">
+          <circle cx={toX(hp[0])} cy={toY(hp[1])} r="5" fill="#f5e400" />
+          <rect x={Math.min(Math.max(toX(hp[0]) - 60, 0), W - 120)} y={Math.max(toY(hp[1]) - 32, padTop)} width="120" height="24" rx="4" fill="rgba(0,0,0,0.92)" />
+          <text x={Math.min(Math.max(toX(hp[0]), 60), W - 60)} y={Math.max(toY(hp[1]) - 14, padTop + 15)} fill="#e6c200" fontSize="13" fontFamily="Barlow Condensed" fontWeight="700" textAnchor="middle">
             {hg > 0 ? '+' : ''}{hg.toFixed(1)}% · {hp[0]}km · {hp[1]}m
           </text>
         </>

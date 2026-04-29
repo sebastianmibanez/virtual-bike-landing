@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --accent: #e6c200;
+  --accent: #f5e400;
   --bg-dark: #080808;
   --bg-card: #0a0a0a;
   --font-condensed: 'Barlow Condensed', sans-serif;
@@ -42,7 +42,7 @@ html {
 }
 
 /* Textura tricota — patrón diagonal sutil sobre amarillo */
-.bg-\[\#e6c200\] {
+.bg-\[\#f5e400\] {
   background-color: var(--accent);
   background-image:
     repeating-linear-gradient(
@@ -66,4 +66,13 @@ body,
       rgba(255,255,255,0.012) 3px,
       rgba(255,255,255,0.012) 4px
     );
+}
+
+@keyframes slow-zoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.12); }
+}
+
+.animate-slow-zoom {
+  animation: slow-zoom 8s ease-in-out infinite alternate;
 }

@@ -118,10 +118,10 @@ function FlipCard({ foto, titulo, intro, items, index }) {
           className="absolute inset-0 overflow-hidden"
           style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
         >
-          <img src={foto} alt={titulo} className="w-full h-full object-cover" />
+          <img src={foto} alt={titulo} className="w-full h-full object-cover animate-slow-zoom" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
           <div className="absolute inset-0 flex flex-col items-center justify-center p-5 text-center">
-            <h3 className="text-[#e6c200] text-3xl md:text-4xl uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
+            <h3 className="text-[#f5e400] text-3xl md:text-4xl uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
               {titulo}
             </h3>
             <p className="text-white/50 text-xs mt-3 uppercase tracking-widest" style={{ fontFamily: 'Barlow Condensed' }}>
@@ -139,7 +139,7 @@ function FlipCard({ foto, titulo, intro, items, index }) {
             transform: 'rotateY(180deg)',
           }}
         >
-          <h3 className="text-[#e6c200] text-4xl md:text-5xl uppercase leading-tight mb-5"
+          <h3 className="text-[#f5e400] text-4xl md:text-5xl uppercase leading-tight mb-5"
             style={{
               fontFamily: 'Barlow Condensed', fontWeight: 900,
               opacity: flipped ? 1 : 0,
@@ -163,7 +163,7 @@ function FlipCard({ foto, titulo, intro, items, index }) {
                   transition: `opacity 450ms ${400 + i * 150}ms, transform 450ms ${400 + i * 150}ms`,
                 }}
               >
-                <span className="text-[#e6c200] text-2xl flex-shrink-0">—</span>
+                <span className="text-[#f5e400] text-2xl flex-shrink-0">—</span>
                 <span className="text-white text-2xl md:text-3xl leading-snug" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>{item}</span>
               </li>
             ))}
@@ -182,11 +182,11 @@ export default function Beneficios() {
   return (
     <section id="beneficios" className="py-20 md:py-28 bg-[#080808]">
       <div className="px-6 md:px-12" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
-        <p className="text-center text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+        <p className="text-center text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
           Incluido con tu inscripción
         </p>
         <h2 className="text-center text-4xl md:text-6xl text-white uppercase leading-none mb-12" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
-          Todo lo que <span className="text-[#e6c200]">te llevas</span>
+          Todo lo que <span className="text-[#f5e400]">te llevas</span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
           {cards.map((c, i) => (

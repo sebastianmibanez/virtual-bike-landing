@@ -74,7 +74,7 @@ export default function Hero() {
           key={i}
           className={`absolute inset-0 transition-opacity duration-700 ${i === current ? 'opacity-100' : 'opacity-0'}`}
         >
-          <img src={s.img} alt="" className="w-full h-full object-cover object-center" fetchPriority={i === 0 ? 'high' : 'low'} />
+          <img src={s.img} alt="" className="w-full h-full object-cover object-center animate-slow-zoom" fetchPriority={i === 0 ? 'high' : 'low'} />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
         </div>
@@ -92,23 +92,23 @@ export default function Hero() {
           className="text-xl md:text-4xl text-white uppercase leading-none mb-1 drop-shadow-xl whitespace-nowrap"
           style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}
         >
-          Clásica <span style={{ color: '#e6c200' }}>Virtual Bike 2026</span>
+          Clásica <span style={{ color: '#f5e400' }}>Virtual Bike 2026</span>
         </h1>
         <p className="text-white/60 text-[10px] md:text-xs leading-relaxed mb-2">
           21 de Mayo · La carrera que todos esperan
         </p>
         <div className="flex items-end gap-1.5 mb-2">
           <CountBox value={days} label="Días" />
-          <span className="text-[#e6c200]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
+          <span className="text-[#f5e400]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
           <CountBox value={hours} label="Horas" />
-          <span className="text-[#e6c200]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
+          <span className="text-[#f5e400]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
           <CountBox value={minutes} label="Min" />
-          <span className="text-[#e6c200]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
+          <span className="text-[#f5e400]/50 text-xs pb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>:</span>
           <CountBox value={seconds} label="Seg" />
         </div>
         <a
           href="#inscripcion"
-          className="inline-block bg-[#e6c200] text-black px-5 py-2 text-xs uppercase hover:bg-white transition-all duration-200 hover:scale-105 shadow-xl shadow-[#e6c200]/20"
+          className="inline-block bg-[#f5e400] text-black px-5 py-2 text-xs uppercase hover:bg-white transition-all duration-200 hover:scale-105 shadow-xl shadow-[#f5e400]/20"
           style={{ fontFamily: 'Barlow Condensed', fontWeight: 800, letterSpacing: '0.08em' }}
         >
           Inscríbete aquí →
