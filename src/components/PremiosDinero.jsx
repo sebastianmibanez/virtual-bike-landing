@@ -37,11 +37,11 @@ export default function PremiosDinero({ genero = '' }) {
 
         {/* Encabezado */}
         <div className="mb-10">
-          <p className="text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+          <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
             Premios en dinero · Clásica 2026
           </p>
           <h2 className="text-4xl md:text-6xl text-white uppercase leading-none mb-4" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
-            {esDamas ? 'Premios' : 'Premios'} <span className="text-[#f5e400]">por categoría</span>
+            {esDamas ? 'Premios' : 'Premios'} <span className="text-[#e6c200]">por categoría</span>
           </h2>
           <p className="text-white/50 text-sm md:text-base" style={{ maxWidth: '42rem' }}>
             {esDamas
@@ -65,7 +65,7 @@ export default function PremiosDinero({ genero = '' }) {
           <div className={`hidden md:grid gap-px bg-white/5 ${esDamas ? 'grid-cols-3' : 'grid-cols-4'}`}>
             {tramos.map((t, i) => (
               <button key={t.id} onClick={() => goTo(i)}
-                className={`p-4 flex items-center justify-center text-center min-h-[52px] transition-all ${efectivoId === t.id ? 'bg-[#f5e400] text-black' : 'bg-[#0a0a0a] text-white/50 hover:text-white hover:bg-white/5'}`}>
+                className={`p-4 flex items-center justify-center text-center min-h-[52px] transition-all ${efectivoId === t.id ? 'bg-[#e6c200] text-black' : 'bg-[#0a0a0a] text-white/50 hover:text-white hover:bg-white/5'}`}>
                 <span className="text-sm uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}>{t.subtitulo}</span>
               </button>
             ))}
@@ -73,12 +73,12 @@ export default function PremiosDinero({ genero = '' }) {
           {/* Mobile: badge visible + dots */}
           <div className="md:hidden">
             <div className="bg-white/5 px-6 py-4 mb-4 text-center">
-              <span className="text-[#f5e400] text-lg uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>{tramo.subtitulo}</span>
+              <span className="text-[#e6c200] text-lg uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>{tramo.subtitulo}</span>
             </div>
             <div className="flex justify-center gap-2">
               {tramos.map((_, i) => (
                 <button key={i} onClick={() => goTo(i)}
-                  className={`w-2 h-2 rounded-full transition-all ${i === activeIdx ? 'bg-[#f5e400]' : 'bg-white/20'}`} />
+                  className={`w-2 h-2 rounded-full transition-all ${i === activeIdx ? 'bg-[#e6c200]' : 'bg-white/20'}`} />
               ))}
             </div>
           </div>
@@ -89,7 +89,7 @@ export default function PremiosDinero({ genero = '' }) {
           {tramo.puestos.map((p) => (
             <div
               key={p.lugar}
-              className={`flex items-center justify-between gap-4 p-3 md:p-4 ${p.lugar === 1 ? 'bg-[#f5e400] text-black' : 'bg-black/40 text-white'}`}
+              className={`flex items-center justify-between gap-4 p-3 md:p-4 ${p.lugar === 1 ? 'bg-[#e6c200] text-black' : 'bg-black/40 text-white'}`}
             >
               <div className="flex items-center gap-4 min-w-0">
                 <div

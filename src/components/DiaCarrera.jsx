@@ -66,6 +66,8 @@ export default function DiaCarrera({ genero = '', setGenero }) {
     setActiveH(0)
   }, [genero])
 
+  const safeActiveH = activeH >= horarios.length ? 0 : activeH
+
   useVisibleInterval(() => {
     setActiveH(i => (i + 1) % horarios.length)
   }, 3000)
@@ -75,11 +77,11 @@ export default function DiaCarrera({ genero = '', setGenero }) {
 
         {/* Encabezado */}
         <div className="mb-14 text-center">
-          <p className="text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+          <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
             21 de Mayo · 2026
           </p>
           <h2 className="text-4xl md:text-6xl text-white uppercase leading-none" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
-            El día de <span className="text-[#f5e400]">carrera</span>
+            El día de <span className="text-[#e6c200]">carrera</span>
           </h2>
           <p className="text-white/50 text-sm md:text-base mt-4" style={{ maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto' }}>
             Una jornada completa de competencia, premios y buen ambiente en Alto Noviciado
@@ -108,7 +110,7 @@ export default function DiaCarrera({ genero = '', setGenero }) {
         <div className="grid grid-cols-4 gap-px bg-white/5 mb-14">
           {datos.map((d) => (
             <div key={d.label} className="bg-[#080808] py-3 px-2 md:px-6 flex flex-col items-center text-center gap-1 md:gap-2">
-              <span className="text-[#f5e400] opacity-70">{d.icon}</span>
+              <span className="text-[#e6c200] opacity-70">{d.icon}</span>
               <div>
                 <div className="text-white text-[10px] md:text-sm uppercase leading-tight" style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}>
                   {d.value}
@@ -143,12 +145,12 @@ export default function DiaCarrera({ genero = '', setGenero }) {
             {/* Slide activo */}
             <div className="bg-white/5 p-6 min-h-[110px] flex flex-col justify-center">
               <div className="flex items-center gap-4">
-                <span className={`text-4xl tabular-nums ${horarios[activeH].destacado ? 'text-[#f5e400]' : 'text-white/30'}`} style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
-                  {horarios[activeH].hora}
+                <span className={`text-4xl tabular-nums ${horarios[safeActiveH].destacado ? 'text-[#e6c200]' : 'text-white/30'}`} style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
+                  {horarios[safeActiveH].hora}
                 </span>
                 <div>
-                  <div className="text-white text-xl uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>{horarios[activeH].label}</div>
-                  <div className="text-white/50 text-sm mt-0.5">{horarios[activeH].categorias}</div>
+                  <div className="text-white text-xl uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>{horarios[safeActiveH].label}</div>
+                  <div className="text-white/50 text-sm mt-0.5">{horarios[safeActiveH].categorias}</div>
                 </div>
               </div>
             </div>
@@ -156,7 +158,7 @@ export default function DiaCarrera({ genero = '', setGenero }) {
             <div className="flex justify-center gap-2 mt-4">
               {horarios.map((_, i) => (
                 <button key={i} onClick={() => { setActiveH(i) }}
-                  className={`w-2 h-2 rounded-full transition-all ${i === activeH ? 'bg-[#f5e400]' : 'bg-white/20'}`} />
+                  className={`w-2 h-2 rounded-full transition-all ${i === safeActiveH ? 'bg-[#e6c200]' : 'bg-white/20'}`} />
               ))}
             </div>
           </div>
@@ -166,9 +168,9 @@ export default function DiaCarrera({ genero = '', setGenero }) {
             {horarios.map((h, i) => (
               <div key={i} className="flex items-center gap-6 py-6">
                 <div className="w-20 flex-shrink-0">
-                  <span className={`text-3xl leading-none tabular-nums ${h.destacado ? 'text-[#f5e400]' : 'text-white/30'}`} style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>{h.hora}</span>
+                  <span className={`text-3xl leading-none tabular-nums ${h.destacado ? 'text-[#e6c200]' : 'text-white/30'}`} style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>{h.hora}</span>
                 </div>
-                <div className="flex-shrink-0"><div className={`w-2 h-2 rounded-full ${h.destacado ? 'bg-[#f5e400]' : 'bg-white/20'}`} /></div>
+                <div className="flex-shrink-0"><div className={`w-2 h-2 rounded-full ${h.destacado ? 'bg-[#e6c200]' : 'bg-white/20'}`} /></div>
                 <div className="flex-1 min-w-0">
                   <div className={`text-xl uppercase leading-tight ${h.destacado ? 'text-white' : 'text-white/50'}`} style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}>{h.label}</div>
                   <div className="text-white/40 text-sm mt-0.5">{h.categorias}</div>

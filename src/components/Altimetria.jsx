@@ -48,7 +48,7 @@ export default function Altimetria() {
   const W = 1000
   const padL = 20
   const padR = 20
-  const H = 260
+  const H = 300
   const padTop = 55
   const padBot = 30
   const chartH = H - padTop - padBot
@@ -200,18 +200,19 @@ export default function Altimetria() {
       </div>
 
       <div className="px-2 md:px-4 py-4 relative">
-        <div style={{ maxHeight: '240px' }}>
+        <div>
           {renderChart(svgRef, 'eleGrad')}
         </div>
-        {/* Fullscreen button - mobile only */}
+        {/* Fullscreen button */}
         <button
           onClick={() => setFullscreen(true)}
-          className="md:hidden absolute bottom-6 right-4 bg-white/10 hover:bg-white/20 text-white/60 rounded-lg p-2 backdrop-blur-sm transition-all"
+          className="absolute bottom-6 right-4 bg-white/15 hover:bg-white/25 text-white rounded-lg px-3 py-2 backdrop-blur-sm transition-all flex items-center gap-2"
           aria-label="Ver altimetría en pantalla completa"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
           </svg>
+          <span className="text-[10px] uppercase tracking-wider hidden sm:inline" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>Ampliar</span>
         </button>
       </div>
     </div>
