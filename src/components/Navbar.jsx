@@ -48,7 +48,7 @@ export default function Navbar() {
           ))}
           <a
             href="#inscripcion"
-            className="bg-[#f5e400] text-black font-bold px-6 py-2 rounded-full text-sm uppercase tracking-wider hover:bg-[#ffe500] transition-all"
+            className="bg-[#e6c200] text-black font-bold px-6 py-2 rounded-full text-sm uppercase tracking-wider hover:bg-[#e6c84a] transition-all"
             style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}
           >
             Inscríbete
@@ -85,7 +85,7 @@ export default function Navbar() {
           <a
             href="#inscripcion"
             onClick={() => setOpen(false)}
-            className="bg-[#f5e400] text-black font-bold px-6 py-3 rounded-full text-center uppercase tracking-wider mt-2"
+            className="bg-[#e6c200] text-black font-bold px-6 py-3 rounded-full text-center uppercase tracking-wider mt-2"
             style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}
           >
             Inscríbete — $40.000

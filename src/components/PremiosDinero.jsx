@@ -111,14 +111,6 @@ export default function PremiosDinero({ genero = '' }) {
                   </span>
                 </div>
               </div>
-              {p.lugar === 1 && (
-                <span
-                  className="bg-black text-[#f5e400] text-[10px] px-2.5 py-1 uppercase tracking-widest flex-shrink-0"
-                  style={{ fontFamily: 'Barlow Condensed', fontWeight: 800 }}
-                >
-                  Champion
-                </span>
-              )}
             </div>
           ))}
         </div>

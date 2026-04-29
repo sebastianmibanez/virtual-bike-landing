@@ -20,11 +20,11 @@ export default function GeneroSwitch({ genero, setGenero }) {
 
         {/* Encabezado */}
         <div className="text-center mb-12">
-          <p className="text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-4" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+          <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-4" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
             Reserva tu cupo
           </p>
           <h2 className="text-5xl md:text-7xl text-white uppercase leading-none mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
-            Inscríbete <span className="text-[#f5e400]">ahora</span>
+            Inscríbete <span className="text-[#e6c200]">ahora</span>
           </h2>
           <p className="text-white/50 text-sm md:text-base">
             Clásica Virtual Bike 2026 · 21 de Mayo · Alto Noviciado
@@ -47,7 +47,7 @@ export default function GeneroSwitch({ genero, setGenero }) {
                 onClick={() => setGenero(val)}
                 className={`flex flex-col items-center gap-3 py-8 px-4 transition-all ${
                   genero === val
-                    ? 'bg-[#f5e400] text-black'
+                    ? 'bg-[#e6c200] text-black'
                     : 'bg-[#080808] text-white/50 hover:text-white hover:bg-white/5'
                 }`}
               >

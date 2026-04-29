@@ -1,10 +1,10 @@
 export default function Field({ label, name, type = 'text', placeholder, value, onChange, required, accentColor }) {
   const borderColor = accentColor || 'rgba(255,255,255,0.3)'
-  const focusClass = accentColor ? '' : 'focus:border-[#f5e400]'
+  const focusClass = accentColor ? '' : 'focus:border-[#e6c200]'
   return (
     <div className="pt-2">
       <label className="block text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700, letterSpacing: '0.15em' }}>
-        {label} {required && <span className="text-[#f5e400]">*</span>}
+        {label} {required && <span className="text-[#e6c200]">*</span>}
       </label>
       <input
         type={type} name={name} value={value} onChange={onChange}

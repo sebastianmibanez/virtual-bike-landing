@@ -219,7 +219,7 @@ export default function Inscripcion({ genero, setGenero }) {
               onClick={() => { setGenero(val); track('genero_click') }}
               className={`flex items-center justify-center gap-2 py-4 px-4 transition-all ${
                 genero === val
-                  ? 'bg-[#f5e400] text-black'
+                  ? 'bg-[#e6c200] text-black'
                   : 'bg-[#080808] text-white/50 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -237,7 +237,7 @@ export default function Inscripcion({ genero, setGenero }) {
         {/* Precio + checklist */}
         <div className="mb-10 flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
           <div className="flex-shrink-0">
-            <div className="text-6xl md:text-7xl text-[#f5e400] leading-none" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
+            <div className="text-6xl md:text-7xl text-[#e6c200] leading-none" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
               $40.000
             </div>
             <p className="text-white/40 text-[10px] md:text-xs mt-2 tracking-[0.2em] uppercase">CLP · Inscripción única</p>
@@ -245,7 +245,7 @@ export default function Inscripcion({ genero, setGenero }) {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3 flex-1">
             {['Medallón finisher (200 primeros)', 'Premios en dinero + sorteos', 'Fotos y videos GRATIS', '3 metas volantes por grupo', 'Tercer tiempo incluido', 'Tricota Champion al 1°'].map((item) => (
               <div key={item} className="flex items-start gap-2">
-                <span className="text-[#f5e400] mt-0.5 text-xs">✓</span>
+                <span className="text-[#e6c200] mt-0.5 text-xs">✓</span>
                 <span className="text-white/80 text-xs md:text-sm leading-snug">{item}</span>
               </div>
             ))}
@@ -285,7 +285,7 @@ export default function Inscripcion({ genero, setGenero }) {
 
                     <div className="pt-2">
                       <label className="block text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700, letterSpacing: '0.15em' }}>
-                        Categoría <span className="text-[#f5e400]">*</span>
+                        Categoría <span className="text-[#e6c200]">*</span>
                       </label>
                       <select
                         name="categoria" value={form.categoria} onChange={handleChange}
@@ -302,7 +302,7 @@ export default function Inscripcion({ genero, setGenero }) {
 
                     <div className="pt-2">
                       <label className="block text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700, letterSpacing: '0.15em' }}>
-                        Número de dorsal preferido <span className="text-[#f5e400]">*</span>
+                        Número de dorsal preferido <span className="text-[#e6c200]">*</span>
                       </label>
                       <select
                         name="dorsal" value={form.dorsal} onChange={handleChange}
@@ -340,7 +340,7 @@ export default function Inscripcion({ genero, setGenero }) {
         {paso === 2 && (
           <div>
             <div className="mb-6 pb-5 border-b border-white/10">
-              <p className="text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+              <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-2" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
                 Cupo reservado ✓
               </p>
               <h3 className="text-xl md:text-2xl text-white uppercase" style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}>
@@ -365,7 +365,7 @@ export default function Inscripcion({ genero, setGenero }) {
               ))}
               <div className="flex items-center justify-between gap-4 pt-3 border-t border-white/10">
                 <span className="text-white/40 text-xs uppercase tracking-widest" style={{ fontFamily: 'Barlow Condensed' }}>Total</span>
-                <span className="text-[#f5e400] text-xl font-black" style={{ fontFamily: 'Barlow Condensed' }}>$40.000 CLP</span>
+                <span className="text-[#e6c200] text-xl font-black" style={{ fontFamily: 'Barlow Condensed' }}>$40.000 CLP</span>
               </div>
             </div>
 
@@ -409,7 +409,7 @@ export default function Inscripcion({ genero, setGenero }) {
 
             {inscritoPagado.qr_img && (
               <div className="bg-white/5 border border-white/10 p-6 mb-6 flex flex-col items-center gap-4">
-                <p className="text-[#f5e400] text-xs uppercase tracking-[0.3em]" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+                <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em]" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
                   Tu código de acreditación
                 </p>
                 <div className="bg-white p-3 rounded">
@@ -420,7 +420,7 @@ export default function Inscripcion({ genero, setGenero }) {
             )}
 
             <div className="bg-white/5 border border-white/10 p-5">
-              <p className="text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
+              <p className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-3" style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}>
                 Información del evento
               </p>
               <p className="text-white/60 text-sm leading-relaxed">
@@ -448,7 +448,7 @@ export default function Inscripcion({ genero, setGenero }) {
               form="cvbk-form"
               type="submit"
               disabled={loadingGuardar}
-              className="w-full bg-[#f5e400] text-black py-10 text-3xl uppercase hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4"
+              className="w-full bg-[#e6c200] text-black py-10 text-3xl uppercase hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4"
               style={{ fontFamily: 'Barlow Condensed', fontWeight: 900, letterSpacing: '0.08em' }}
             >
               {loadingGuardar ? 'Guardando...' : <><span>Inscribirme a Clásica Virtual</span><span>→</span></>}
@@ -472,7 +472,7 @@ export default function Inscripcion({ genero, setGenero }) {
               <button
                 onClick={handlePagar}
                 disabled={loadingPagar}
-                className="w-full bg-[#f5e400] text-black py-10 text-3xl uppercase hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4"
+                className="w-full bg-[#e6c200] text-black py-10 text-3xl uppercase hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4"
                 style={{ fontFamily: 'Barlow Condensed', fontWeight: 900, letterSpacing: '0.08em' }}
               >
                 {loadingPagar ? 'Procesando...' : <><span>Pagar $40.000</span><span>→</span></>}

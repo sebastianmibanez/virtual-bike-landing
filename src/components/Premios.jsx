@@ -51,7 +51,7 @@ function BentoCard({ tag, titulo, body, img, icon, span = '', size }) {
   const hasImg = !!img
   return (
     <div
-      className={`relative overflow-hidden border border-white/10 bg-[#0f0f0f] hover:border-[#f5e400]/40 transition-all group ${span} ${
+      className={`relative overflow-hidden border border-white/10 bg-[#0f0f0f] hover:border-[#e6c200]/40 transition-all group ${span} ${
         size === 'lg' ? 'min-h-[360px] md:min-h-[480px]' : 'min-h-[220px]'
       }`}
     >
@@ -69,7 +69,7 @@ function BentoCard({ tag, titulo, body, img, icon, span = '', size }) {
       <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-7">
         {icon && !hasImg && <div className="text-4xl mb-3">{icon}</div>}
         <span
-          className="text-[#f5e400] text-[10px] uppercase tracking-[0.3em] mb-2"
+          className="text-[#e6c200] text-[10px] uppercase tracking-[0.3em] mb-2"
           style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}
         >
           — {tag}
@@ -97,7 +97,7 @@ export default function Premios() {
         {/* Encabezado */}
         <div className="mb-12">
           <p
-            className="text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-3"
+            className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-3"
             style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}
           >
             Este año viene con todo
@@ -106,7 +106,7 @@ export default function Premios() {
             className="text-4xl md:text-6xl text-white uppercase leading-none"
             style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}
           >
-            La experiencia <span className="text-[#f5e400]">completa</span>
+            La experiencia <span className="text-[#e6c200]">completa</span>
           </h2>
           <p className="text-white/50 text-sm md:text-base mt-4 max-w-2xl">
             Más allá del podio y los premios en dinero, esto incluye tu inscripción a la Clásica Virtual Bike 2026.

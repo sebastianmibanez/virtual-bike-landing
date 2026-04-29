@@ -6,28 +6,28 @@ const categorias = [
     giros: 2,
     km: 60,
     largada: 'Próximamente',
-    color: '#f5e400',
+    color: '#e6c200',
   },
   {
     nombre: 'Damas',
     giros: 2,
     km: 60,
     largada: 'Próximamente',
-    color: '#f5e400',
+    color: '#e6c200',
   },
   {
     nombre: 'Todo Competidor',
     giros: 3,
     km: 90,
     largada: 'Próximamente',
-    color: '#f5e400',
+    color: '#e6c200',
   },
   {
     nombre: 'Elite',
     giros: 4,
     km: 120,
     largada: 'Próximamente',
-    color: '#f5e400',
+    color: '#e6c200',
   },
 ]
 
@@ -85,7 +85,7 @@ export default function Categorias() {
         {/* Header */}
         <div className="text-center mb-16">
           <p
-            className="text-[#f5e400] text-xs uppercase tracking-[0.3em] mb-4"
+            className="text-[#e6c200] text-xs uppercase tracking-[0.3em] mb-4"
             style={{ fontFamily: 'Barlow Condensed', fontWeight: 700 }}
           >
             Noviciado Alto, Lampa
@@ -95,7 +95,7 @@ export default function Categorias() {
             style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}
           >
             El desafío te espera<br />
-            <span className="text-[#f5e400]">en cada kilómetro</span>
+            <span className="text-[#e6c200]">en cada kilómetro</span>
           </h2>
           <p className="text-white/50 mt-4 text-base md:text-lg">
             Elige tu categoría y demuestra de qué estás hecho
@@ -118,7 +118,7 @@ export default function Categorias() {
           ].map((s) => (
             <div key={s.label} className="text-center">
               <div
-                className="text-4xl md:text-5xl text-[#f5e400]"
+                className="text-4xl md:text-5xl text-[#e6c200]"
                 style={{ fontFamily: 'Barlow Condensed', fontWeight: 900 }}
               >
                 {s.value}
@@ -132,7 +132,7 @@ export default function Categorias() {
         <div className="text-center">
           <a
             href="#inscripcion"
-            className="inline-block bg-[#f5e400] text-black px-12 py-4 text-base uppercase hover:bg-white transition-all duration-200 hover:scale-105 shadow-2xl shadow-[#f5e400]/20"
+            className="inline-block bg-[#e6c200] text-black px-12 py-4 text-base uppercase hover:bg-white transition-all duration-200 hover:scale-105 shadow-2xl shadow-[#e6c200]/20"
             style={{ fontFamily: 'Barlow Condensed', fontWeight: 800, letterSpacing: '0.08em' }}
           >
             Inscríbete aquí →
