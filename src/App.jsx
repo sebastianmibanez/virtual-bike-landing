@@ -50,13 +50,13 @@ export default function App() {
             <div className="relative z-10">
               <DiaCarrera genero={genero} setGenero={setGenero} />
               <PremiosDinero genero={genero} />
-              <Dudas />
               <Inscripcion genero={genero} setGenero={setGenero} />
             </div>
           </div>
           <Beneficios />
           <Patrocinadores />
           <Footer />
+          <Dudas />
           <StickyCTA />
         </Suspense>
       </div>

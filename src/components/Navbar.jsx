@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 const links = [
   { label: 'Día de carrera', href: '#dia-carrera' },
   { label: 'Premios', href: '#premios-dinero' },
-  { label: 'Beneficios', href: '#premios' },
+  { label: 'Beneficios', href: '#beneficios' },
+  { label: 'Galería', href: '#galeria' },
 ]
 
 export default function Navbar() {

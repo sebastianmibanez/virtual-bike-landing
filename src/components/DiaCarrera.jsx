@@ -2,6 +2,7 @@ const clasica3 = `${import.meta.env.BASE_URL}images/virtual15.webp`
 import { useState, useEffect, useRef } from 'react'
 import { horariosPorGenero } from '../config/categorias'
 import { useVisibleInterval } from '../hooks/useVisibleInterval'
+import Altimetria from './Altimetria'
 
 const datos = [
   {
@@ -15,8 +16,8 @@ const datos = [
     ),
   },
   {
-    label: 'Vueltas',
-    value: '3 giros al circuito',
+    label: 'Recorrido',
+    value: '3 vueltas · 3 metas volantes',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -25,22 +26,21 @@ const datos = [
     ),
   },
   {
-    label: 'Metas volantes',
-    value: '3 metas volantes',
+    label: 'Distancia total',
+    value: '98.3 km · +253m desnivel',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
-        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-        <line x1="4" y1="22" x2="4" y2="15" />
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
       </svg>
     ),
   },
   {
-    label: 'Sistema',
-    value: 'Foto finish oficial',
+    label: 'Recta final',
+    value: '1.5 km · 7.4% máx · 3.5% prom',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-        <circle cx="12" cy="13" r="4" />
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+        <line x1="4" y1="22" x2="4" y2="15" />
       </svg>
     ),
   },
@@ -70,7 +70,7 @@ export default function DiaCarrera({ genero = '', setGenero }) {
     setActiveH(i => (i + 1) % horarios.length)
   }, 3000)
   return (
-    <section id="dia-carrera" className="relative py-20 md:py-28">
+    <section id="dia-carrera" className="relative py-24 md:py-36">
       <div className="px-6 md:px-12" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
 
         {/* Encabezado */}
@@ -87,7 +87,7 @@ export default function DiaCarrera({ genero = '', setGenero }) {
         </div>
 
         {/* Video circuito */}
-        <div className="mb-8 rounded-xl overflow-hidden" style={{ aspectRatio: '16/9', background: '#000' }}>
+        <div className="mb-4 rounded-xl overflow-hidden" style={{ aspectRatio: '16/9', background: '#000' }}>
           <iframe
             src="https://www.youtube.com/embed/EF120hfcYJ4?rel=0&modestbranding=1&color=white"
             title="Circuito Clásica Virtual 2026"
@@ -97,6 +97,11 @@ export default function DiaCarrera({ genero = '', setGenero }) {
             className="w-full h-full"
             style={{ border: 'none' }}
           />
+        </div>
+
+        {/* Altimetría custom */}
+        <div className="mb-8">
+          <Altimetria />
         </div>
 
         {/* 4 datos clave con SVG */}
