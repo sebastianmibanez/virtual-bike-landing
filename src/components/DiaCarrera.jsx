@@ -94,9 +94,9 @@ export default function DiaCarrera({ genero = '', setGenero }) {
   }, [horarios.length])
   return (
     <section id="dia-carrera" className="relative overflow-hidden py-20 md:py-28">
-      <div className="absolute inset-0 opacity-50">
+      <div className="absolute inset-0 opacity-30">
         <img src={clasica3} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/60 via-transparent to-[#080808]/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-transparent to-[#080808]/80" />
       </div>
 
       <div className="relative z-10 px-6 md:px-12" style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }}>
